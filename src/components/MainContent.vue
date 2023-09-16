@@ -1,21 +1,19 @@
+<script setup>
+import TheTimeline from '../pages/TheTimeline.vue'
+import TheProgress from '../pages/TheProgress.vue'
+import TheActivities from '../pages/TheActivities.vue'
+import NotFound from '../pages/NotFound.vue'
+
+import { PAGE_TIMELINE, PAGE_ACTIVITIES, PAGE_PROGRESS } from '../constants.js'
+
+
+</script>
+
 <template>
    <main class="px-10 py-2 flex flex-col flex-grow">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni recusandae eos cupiditate
-      repellendus distinctio voluptas. Nisi quia ea maxime libero nulla corporis error, perspiciatis
-      expedita sint earum omnis tempora eius reiciendis sapiente vel! Unde esse ut officiis at
-      distinctio neque quam, voluptas culpa! Lorem ipsum dolor sit amet consectetur adipisicing
-      elit. Magni recusandae eos cupiditate repellendus distinctio voluptas. Nisi quia ea maxime
-      libero nulla corporis error, perspiciatis expedita sint earum omnis tempora eius repellendus
-      exercitationem hic, dolorum nam tenetur eligendi non. Pariatur incidunt nulla placeat dicta
-      cum ducimus fuga sint beatae fugit maxime expedita minima obcaecati debitis ab ut porro
-      molestias tempore hic accusantium cumque saepe asperiores vero, assumenda reprehenderit.
-      Magnam neque sunt voluptas officia id, laboriosam unde quisquam quasi velit in commodi non
-      suscipit quo, perferendis earum maiores ex reiciendis sapiente vel! Unde esse ut officiis at
-      distinctio neque quam, voluptas culpa! Lorem ipsum dolor sit amet consectetur adipisicing
-      elit. Magni recusandae eos cupiditate repellendus distinctio voluptas. Nisi quia ea maxime
-      libero nulla corporis error, perspiciatis expedita sint earum omnis tempora eius repellendus
-      exercitationem hic, dolorum nam tenetur eligendi non. Pariatur incidunt nulla placeat dicta
-      cum ducimus fuga sint beatae fugit maxime expedita minima at distinctio neque quam, voluptas
-      culpa!
+      <the-timeline v-if="$route['fullPath'].slice(2) == PAGE_TIMELINE" />
+      <the-progress v-else-if="$route['fullPath'].slice(2) == PAGE_PROGRESS" />
+      <the-activities v-else-if="$route['fullPath'].slice(2) == PAGE_ACTIVITIES" />
+      <not-found v-else/>
    </main>
 </template>
