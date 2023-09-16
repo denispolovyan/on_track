@@ -1,15 +1,22 @@
 <script setup>
 import NavItem from './NavItem.vue'
 
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+//////// VUE
+
+import { watch, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
+//////// CONSTANTS
 
 import { PAGE_TIMELINE, PAGE_ACTIVITIES, PAGE_PROGRESS } from '../constants.js'
+
+//////// ICONS
 
 import { ClockIcon } from '@heroicons/vue/24/outline'
 import { ClipboardDocumentListIcon } from '@heroicons/vue/24/outline'
 import { ForwardIcon } from '@heroicons/vue/24/outline'
 
+//////// PAGE FOR ICONS
 
 const navItems = {
    [PAGE_TIMELINE]: ClockIcon,
@@ -17,21 +24,33 @@ const navItems = {
    [PAGE_PROGRESS]: ClipboardDocumentListIcon
 }
 
+//////// ROUTER
+
 const router = useRouter()
-let currentPage = ref(normalizePageHash())
+const route = useRoute()
 
-function normalizePageHash() {
-   console.log(window.location.hash)
+////////
 
-   const hash = window.location.hash.slice(1)
-
-   if (Object.keys(navItems).includes(hash)) {
-      return hash
+function normalizePageHash(newUrl) {
+   if (!newUrl) {
+      router.push('#' + PAGE_ACTIVITIES)
    }
 
-   router.push('#' + PAGE_ACTIVITIES)
-   return PAGE_ACTIVITIES
+   router.push(newUrl.slice(1))
 }
+
+watch(
+   () => route['fullPath'],
+   (newPage) => {
+      normalizePageHash(newPage)
+   }
+)
+
+onMounted(() => {
+   if (!Object.keys(navItems).includes(window.location.hash.slice(1))) {
+      router.push('#' + PAGE_ACTIVITIES)
+   }
+})
 </script>
 
 <template>
@@ -40,10 +59,10 @@ function normalizePageHash() {
          <nav-item
             v-for="(icon, title) in navItems"
             :key="title"
-            @click="(currentPage = title), normalizePageHash()"
+            @click="normalizePageHash()"
             :href="`#${title}`"
             :class="{
-               ' bg-gray-200 pointer-events-none': currentPage == title
+               ' bg-gray-200 pointer-events-none': $route['fullPath'].slice(2) == title
             }"
          >
             <p class="capitalize">{{ title }}</p>
