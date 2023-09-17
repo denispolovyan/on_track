@@ -1,3 +1,17 @@
+<script setup>
+import TimelineItem from '../components/TimelineItem.vue'
+
+import { generateTimelineItems } from '../functions.js'
+</script>
+
 <template>
-   <h1>The timeline</h1>
+   <div>
+      <ul>
+         <timeline-item
+            v-for="timelineItem in generateTimelineItems()"
+            :key="timelineItem.hour"
+            :timelineItem="timelineItem"
+         />
+      </ul>
+   </div>
 </template>

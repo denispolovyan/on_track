@@ -8,21 +8,8 @@ import { useRouter, useRoute } from 'vue-router'
 
 //////// CONSTANTS
 
-import { PAGE_TIMELINE, PAGE_ACTIVITIES, PAGE_PROGRESS } from '../constants.js'
-
-//////// ICONS
-
-import { ClockIcon } from '@heroicons/vue/24/outline'
-import { ClipboardDocumentListIcon } from '@heroicons/vue/24/outline'
-import { ForwardIcon } from '@heroicons/vue/24/outline'
-
-//////// PAGE FOR ICONS
-
-const navItems = {
-   [PAGE_TIMELINE]: ClockIcon,
-   [PAGE_ACTIVITIES]: ForwardIcon,
-   [PAGE_PROGRESS]: ClipboardDocumentListIcon
-}
+import {PAGE_ACTIVITIES} from '../constants.js'
+import {NAV_ITEMS} from '../constants.js'
 
 //////// ROUTER
 
@@ -31,9 +18,10 @@ const route = useRoute()
 
 ////////
 
-function normalizePageHash(newUrl) {
+function normalizePageHash(newUrl = '') {
    if (!newUrl) {
       router.push('#' + PAGE_ACTIVITIES)
+		return;
    }
 
    router.push(newUrl.slice(1))
@@ -47,9 +35,7 @@ watch(
 )
 
 onMounted(() => {
-   if (!Object.keys(navItems).includes(window.location.hash.slice(1))) {
-      router.push('#' + PAGE_ACTIVITIES)
-   }
+   normalizePageHash()
 })
 </script>
 
@@ -57,7 +43,7 @@ onMounted(() => {
    <nav class="sticky bottom-0 z-20 border-t bg-white">
       <ul class="divide-x flex items-center justify-around">
          <nav-item
-            v-for="(icon, title) in navItems"
+            v-for="(icon, title) in NAV_ITEMS"
             :key="title"
             @click="normalizePageHash()"
             :href="`#${title}`"
