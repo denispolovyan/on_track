@@ -3,7 +3,16 @@ import BaseSelect from './BaseSelect.vue'
 import { optionsList } from '../constants.js'
 import { FireIcon } from '@heroicons/vue/24/outline'
 
-const props = defineProps(['timelineItem'])
+
+const props = defineProps({
+   timelineItem: {
+      type: Object,
+      required: true,
+		validator(timelineItem){
+				return typeof timelineItem.hour == 'number'
+		}
+   },
+})
 
 const selectInfo = {
    placeholder: 'Rest',

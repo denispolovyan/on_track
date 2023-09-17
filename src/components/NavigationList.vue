@@ -47,6 +47,7 @@ onMounted(() => {
             :key="title"
             @click="normalizePageHash()"
             :href="`#${title}`"
+				class="px-2"
             :class="{
                ' bg-gray-200 pointer-events-none': $route['fullPath'].slice(2) == title
             }"
