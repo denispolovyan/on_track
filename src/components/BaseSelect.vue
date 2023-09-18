@@ -1,11 +1,15 @@
 <script setup>
+import { isOptionListValid, isNumber } from '../validators.js'
+import { isNumberNull } from '../functions.js'
+
+
 defineProps({
    optionsList: {
       type: Array,
       required: true,
-		validator(optionsList){
-			return optionsList.every(({value, name}) => typeof value === 'number' && typeof name === 'string')
-		}
+      validator(optionsList) {
+         return isOptionListValid(optionsList)
+      }
    },
    placeholder: {
       type: String,
@@ -17,12 +21,16 @@ defineProps({
    }
 })
 
-const optionsListItem = ['w-44 h-9 rounded-md px-1 bg-stone-100 truncate']
+defineEmits({
+   select: isNumber
+})
+
+const optionsListItem = ['w-44 h-14 rounded-md px-2 bg-stone-100 truncate']
 </script>
 
 <template>
-   <select :class="optionsListItem" name="" id="">
-      <option selected disabled value="">
+   <select :class="optionsListItem" @change="$emit('select', Number($event.target.value))">
+      <option :selected="isNumberNull(selected)" disabled>
          {{ placeholder }}
       </option>
       <option

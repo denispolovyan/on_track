@@ -1,5 +1,8 @@
+import {HOURS_IN_DAY} from './constants.js'
+
+// -- //
+
 export function generateTimelineItems() {
-   const HOURS_IN_DAY = 24
    const timelineItems = []
 
    for (let i = 0; i < HOURS_IN_DAY; i++) {
@@ -7,4 +10,10 @@ export function generateTimelineItems() {
    }
 
    return timelineItems
+}
+
+// -- //
+
+export function isNumberNull(number) {
+   return number == 0
 }

@@ -1,40 +1,47 @@
 <script setup>
-import BaseSelect from './BaseSelect.vue'
-import { optionsList } from '../constants.js'
-import { FireIcon } from '@heroicons/vue/24/outline'
+import { ref } from 'vue'
 
+import BaseSelect from './BaseSelect.vue'
+import TimelineHour from './TimelineHour.vue'
+import BaseButton from './BaseButton.vue'
+
+import { optionsList } from '../constants.js'
+import { isTimelineValid } from '../validators.js'
+
+import { MinusCircleIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
    timelineItem: {
       type: Object,
       required: true,
-		validator(timelineItem){
-				return typeof timelineItem.hour == 'number'
-		}
-   },
+      validator(timelineItem) {
+         return isTimelineValid(timelineItem)
+      }
+   }
 })
 
-const selectInfo = {
-   placeholder: 'Rest',
-   selected: 1,
-}
+let placeholder = 'Rest'
+let selected = ref(0)
 
 const hourItemClasses = [
-   'py-3 px-4 my-4 border-b rounded-md cursor-pointer flex justify-between items-center',
-   props.timelineItem.hour == new Date().getHours() ? 'bg-stone-400' : 'bg-stone-300'
+   'py-2 px-4 my-4 border-b rounded-md cursor-pointer flex justify-between items-center',
+   props.timelineItem.hour == new Date().getHours() ? 'bg-stone-400' : 'bg-stone-200'
 ]
 </script>
 
 <template>
    <li :class="hourItemClasses">
-      <a href="" class="">{{ timelineItem.hour }}:00</a>
+      <timeline-hour :hour="timelineItem.hour" />
       <div class="flex gap-2 items-center">
          <base-select
             :optionsList="optionsList"
-            :placeholder="selectInfo.placeholder"
-            :selected="selectInfo.selected"
+            :placeholder="placeholder"
+            :selected="selected"
+            @select="selected = $event"
          />
-         <FireIcon class="w-7 cursor-pointer" />
+         <base-button :background="'text-rose-600'" @click="selected = 0"
+            ><MinusCircleIcon class="w-12 cursor-pointer"
+         /></base-button>
       </div>
    </li>
 </template>

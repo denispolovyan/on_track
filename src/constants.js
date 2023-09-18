@@ -16,10 +16,20 @@ export const NAV_ITEMS = {
    [PAGE_PROGRESS]: ClipboardDocumentListIcon
 }
 
-// --- Activities --- //
+// --- ACTIVITIES --- //
 
 export const optionsList = [
    { value: 1, name: 'Coding' },
    { value: 2, name: 'Reading' },
    { value: 3, name: 'Training' }
 ]
+
+export const timeList = [
+   { value: 1, name: '0:15' },
+   { value: 2, name: '0:20' },
+   { value: 3, name: '0:30' }
+]
+
+// --- CONSTANTS --- //
+
+export const HOURS_IN_DAY = 24

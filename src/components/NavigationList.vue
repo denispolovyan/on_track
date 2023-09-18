@@ -1,4 +1,5 @@
 <script setup>
+
 import NavItem from './NavItem.vue'
 
 //////// VUE
@@ -37,6 +38,7 @@ watch(
 onMounted(() => {
    normalizePageHash()
 })
+
 </script>
 
 <template>
