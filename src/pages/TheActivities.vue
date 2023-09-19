@@ -2,12 +2,13 @@
 import ActivityItem from '../components/ActivityItem.vue'
 import BaseInput from '../components/BaseInput.vue'
 
+
 import { PlusCircleIcon } from '@heroicons/vue/24/outline'
 
-import { isActivityValid, isInputValueValid } from '../validators.js'
+import { DEFAULT_TASKS_QUANTITY } from '../constants.js'
 
 defineProps({
-   activities: {
+   userActivities: {
       type: Array,
       required: false
    }
@@ -17,27 +18,26 @@ defineEmits({
    deleteActivity: {
       type: String,
       required: true,
-      validator: isActivityValid
    },
-   addNewValue: {
-      type: String,
-      validator: isInputValueValid
+   addActivity: {
+      type: String
    }
 })
 </script>
 
 <template>
    <div>
-      <base-input @addNewValue="$emit('addNewValue', $event)" :placeholder="'Create new activity'"
+      <base-input @addNewValue="$emit('addActivity', $event)" :placeholder="'Create new activity'"
          ><PlusCircleIcon class="w-12"
       /></base-input>
       <ul class="flex flex-col">
          <activity-item
-            v-for="activity in activities"
-            :key="activity"
-            :activity="activity"
+            v-for="num in DEFAULT_TASKS_QUANTITY"
+            :key="num"
+            :activities="userActivities"
             @deleteActivity="$emit('deleteActivity', $event)"
          />
+
       </ul>
    </div>
 </template>

@@ -28,11 +28,9 @@ function addNewValue() {
    if (isInputValueValid(inputValue.value)) {
       emit('addNewValue', inputValue.value)
       inputValue.value = ''
-      console.log('if')
       return
    }
    error.value = true
-   console.log('else')
 }
 </script>
 
@@ -42,6 +40,7 @@ function addNewValue() {
          v-model="inputValue"
          :placeholder="placeholder"
          type="text"
+			maxlength="20"
          @input="error = false"
          class="outline-0 px-2 bg-stone-200 w-44 h-8 border-r duration-1000"
          :class="{

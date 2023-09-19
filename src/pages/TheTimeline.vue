@@ -2,6 +2,13 @@
 import TimelineItem from '../components/TimelineItem.vue'
 
 import { generateTimelineItems } from '../functions.js'
+
+defineProps({
+	activities: {
+		type: Array,
+		required: false
+	}
+})
 </script>
 
 <template>
@@ -11,6 +18,7 @@ import { generateTimelineItems } from '../functions.js'
             v-for="timelineItem in generateTimelineItems()"
             :key="timelineItem.hour"
             :timelineItem="timelineItem"
+				:activities="activities"
          />
       </ul>
    </div>

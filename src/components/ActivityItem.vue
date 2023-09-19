@@ -1,38 +1,52 @@
 <script setup>
 import BaseButton from './BaseButton.vue'
 import BaseSelect from './BaseSelect.vue'
+import BaseHorizontalButton from './BaseHorizontalButton.vue'
 
 import { MinusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
 import { timeList } from '../constants.js'
 
-import { isActivityValid } from '../validators.js'
-
 import { ref } from 'vue'
 
 defineProps({
-   activity: {
-      type: String,
-      required: true,
-      validator: isActivityValid
+   activities: {
+      type: Array,
+      required: true
    }
 })
 
 defineEmits({
+   deleteTask: {
+      type: Object,
+      required: false
+   },
    deleteActivity: {
-      type: String,
-      validator: isActivityValid
+      type: Number,
+      required: false
    }
 })
 
 const secondsToComplete = ref(0)
+const selectedActivity = ref(0)
+
+function setSelectedActivity(activity) {
+   selectedActivity.value = activity
+}
 </script>
 
 <template>
    <li class="flex flex-col gap-2 border-b py-4">
-      <div class="flex justify-between items-center border rounded-md ps-2 bg-stone-100">
-         <span>{{ activity }}</span>
-         <base-button @click="$emit('deleteActivity', activity)" :background="'text-rose-800'"
+      <div class="flex justify-between items-center border rounded-md bg-stone-100">
+         <base-select
+            :placeholder="'Rest'"
+            :optionsList="activities"
+            :selected="selectedActivity"
+            @select="setSelectedActivity($event)"
+         />
+         <base-button
+            @click="$emit('deleteActivity', selectedActivity)"
+            :background="'text-rose-800'"
             ><TrashIcon class="h-12 border-l"
          /></base-button>
       </div>
@@ -48,5 +62,9 @@ const secondsToComplete = ref(0)
             ><MinusIcon class="border-l h-12"
          /></base-button>
       </div>
+      <BaseHorizontalButton
+         :text="'delete task'"
+         :color="'text-black hover:text-white hover:bg-red-500  bg-stone-100'"
+      />
    </li>
 </template>

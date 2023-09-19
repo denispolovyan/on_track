@@ -1,7 +1,6 @@
 <script setup>
-import { isOptionListValid, isNumber } from '../validators.js'
+import { isOptionListValid } from '../validators.js'
 import { isNumberNull } from '../functions.js'
-
 
 defineProps({
    optionsList: {
@@ -21,15 +20,22 @@ defineProps({
    }
 })
 
-defineEmits({
-   select: isNumber
+const emit = defineEmits({
+   select: {
+      type: Object,
+      required: false
+   }
 })
+
+function setSelectedActivity(activity) {
+   emit('select', activity)
+}
 
 const optionsListItem = ['w-44 h-14 px-2 bg-stone-100 truncate']
 </script>
 
 <template>
-   <select :class="optionsListItem" @change="$emit('select', Number($event.target.value))">
+   <select :class="optionsListItem" @change="setSelectedActivity(Number($event.target.value))">
       <option :selected="isNumberNull(selected)" disabled>
          {{ placeholder }}
       </option>
