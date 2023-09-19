@@ -5,10 +5,6 @@ import BaseHorizontalButton from '../components/BaseHorizontalButton.vue'
 
 import { PlusCircleIcon } from '@heroicons/vue/24/outline'
 
-import { DEFAULT_TASKS_QUANTITY } from '../constants.js'
-
-import { ref } from 'vue'
-
 defineProps({
    userActivities: {
       type: Array,
@@ -27,15 +23,15 @@ defineEmits({
    },
    addActivity: {
       type: String
+   },
+   addTask: {
+      required: false
+   },
+   deleteTask: {
+      type: Number,
+      required: true
    }
 })
-
-const tasksQuantity = ref(DEFAULT_TASKS_QUANTITY)
-
-function changeTasksQuantity() {
-	console.log(1)
-   tasksQuantity.value = tasksQuantity.value + 1
-}
 </script>
 
 <template>
@@ -49,15 +45,17 @@ function changeTasksQuantity() {
          <base-horizontal-button
             :text="'add new task'"
             :color="'text-black hover:text-white hover:bg-green-500  bg-stone-100'"
-            @clickButton="changeTasksQuantity()"
+            @clickButton="$emit('addTask')"
          />
       </div>
       <ul class="flex flex-col">
          <activity-item
-            v-for="num in tasks || tasksQuantity"
-            :key="num"
+            v-for="task in tasks"
+            :key="task.id"
             :activities="userActivities"
+            :task="task"
             @deleteActivity="$emit('deleteActivity', $event)"
+            @deleteTask="$emit('deleteTask', $event)"
          />
       </ul>
    </div>

@@ -8,10 +8,15 @@ import { MinusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { TIME_LIST } from '../constants.js'
 
 import { ref } from 'vue'
+import { isNumberNull } from '../functions'
 
 defineProps({
    activities: {
       type: Array,
+      required: true
+   },
+   task: {
+      type: Object,
       required: true
    }
 })
@@ -24,6 +29,10 @@ defineEmits({
    deleteActivity: {
       type: Number,
       required: false
+   },
+   deleteTask: {
+      type: Number,
+      required: true
    }
 })
 
@@ -41,7 +50,7 @@ function setSelectedActivity(activity) {
          <base-select
             :placeholder="'Rest'"
             :optionsList="activities"
-            :selected="selectedActivity"
+            :selected="task.activity"
             @select="setSelectedActivity($event)"
          />
          <base-button
@@ -54,7 +63,7 @@ function setSelectedActivity(activity) {
          <base-select
             :placeholder="'h:m'"
             :optionsList="TIME_LIST"
-            :selected="secondsToComplete"
+            :selected="task.time"
             @select="secondsToComplete = $event"
             class="border-r"
          />
@@ -63,6 +72,7 @@ function setSelectedActivity(activity) {
          /></base-button>
       </div>
       <BaseHorizontalButton
+         @clickButton="$emit('deleteTask', task.id)"
          :text="'delete task'"
          :color="'text-black hover:text-white hover:bg-red-500  bg-stone-100'"
       />

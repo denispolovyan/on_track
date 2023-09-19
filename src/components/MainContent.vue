@@ -10,6 +10,29 @@ import { ref } from 'vue'
 
 let activities = ref(ACTIVITIES_LIST)
 
+let tasks = ref([])
+
+function addTask() {
+   const id = tasks.value.length + 1
+   const taskToAdd = { activity: 0, time: 0, id: id }
+   tasks.value.unshift(taskToAdd)
+}
+
+function deleteTask(id) {
+   const filteredTasks = []
+   tasks.value.forEach((el) => {
+      if (el.id != id) {
+         filteredTasks.push(el)
+      }
+   })
+   tasks.value = filteredTasks
+}
+
+function addActivity(activity) {
+   const length = activities.value.length + 1
+   activities.value.push({ value: length, name: activity })
+}
+
 function deleteActivity(activityToDelete) {
    const filteredActivities = []
    activities.value.forEach((el) => {
@@ -18,11 +41,6 @@ function deleteActivity(activityToDelete) {
       }
    })
    activities.value = filteredActivities
-}
-
-function addActivity(activity) {
-   const length = activities.value.length + 1
-   activities.value.push({ value: length, name: activity })
 }
 </script>
 
@@ -33,7 +51,10 @@ function addActivity(activity) {
       <the-activities
          @addActivity="addActivity($event)"
          @deleteActivity="deleteActivity($event)"
+         @addTask="addTask()"
+         @deleteTask="deleteTask($event)"
          :userActivities="activities"
+         :tasks="tasks"
          v-else-if="$route['fullPath'].slice(2) == PAGE_ACTIVITIES"
       />
       <not-found v-else />
