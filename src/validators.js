@@ -7,7 +7,7 @@ export function isNumber(value) {
 // -- //
 
 export function isString(value) {
-   return typeof value == 'string'
+   return typeof value === 'string'
 }
 
 // -- //
@@ -17,8 +17,8 @@ export function isNotNull(value) {
 }
 
 // -- //
-export function isActivityValid(activity){
-	return isString(activity) && isNotNull(activity)
+export function isActivityValid(activity) {
+   return isString(activity) && isNotNull(activity)
 }
 
 // -- //
@@ -30,11 +30,23 @@ export function isOptionListValid(optionsList) {
 // -- //
 
 export function isTimelineValid(timelineItem) {
-   return isNumber(timelineItem.hour) 
+   return isNumber(timelineItem.hour)
 }
 
 // -- //
 
 export function isBackgroundClassValid(backgroundClass) {
    return isString(backgroundClass) && isNotNull(backgroundClass)
+}
+
+// -- //
+
+export function isPlaceholderValid(placeholder) {
+   return isString(placeholder) && isNotNull(placeholder)
+}
+
+// -- //
+
+export function isInputValueValid(input) {
+   return isString(input) && isNotNull(input)
 }

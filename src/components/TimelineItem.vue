@@ -24,14 +24,14 @@ let placeholder = 'Rest'
 let selected = ref(0)
 
 const hourItemClasses = [
-   'py-2 px-4 my-4 border-b rounded-md cursor-pointer flex justify-between items-center',
+   'pl-4 my-4 border-b rounded-md cursor-pointer flex justify-between items-center',
    props.timelineItem.hour == new Date().getHours() ? 'bg-stone-400' : 'bg-stone-200'
 ]
 </script>
 
 <template>
    <li :class="hourItemClasses">
-      <timeline-hour :hour="timelineItem.hour" />
+      <timeline-hour :hour="timelineItem.hour" class="pr-2 py-4 border-r border-slate-300"/>
       <div class="flex gap-2 items-center">
          <base-select
             :optionsList="optionsList"
@@ -40,7 +40,7 @@ const hourItemClasses = [
             @select="selected = $event"
          />
          <base-button :background="'text-rose-600'" @click="selected = 0"
-            ><MinusCircleIcon class="w-12 cursor-pointer"
+            ><MinusCircleIcon class="w-12"
          /></base-button>
       </div>
    </li>

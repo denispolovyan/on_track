@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-   <span class="p-1 bg-stone-100 rounded-md cursor-pointer"
+   <span class="p-1 rounded-md cursor-pointer"
 	:class="background">
       <slot></slot>
    </span>

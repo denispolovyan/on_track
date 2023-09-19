@@ -25,7 +25,7 @@ defineEmits({
    select: isNumber
 })
 
-const optionsListItem = ['w-44 h-14 rounded-md px-2 bg-stone-100 truncate']
+const optionsListItem = ['w-44 h-14 px-2 bg-stone-100 truncate']
 </script>
 
 <template>

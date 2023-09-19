@@ -42,7 +42,7 @@ const secondsToComplete = ref(0)
             :optionsList="timeList"
             :selected="secondsToComplete"
             @select="secondsToComplete = $event"
-            class="border-r rounded-none"
+            class="border-r"
          />
          <base-button @click="secondsToComplete = 0" :background="'text-yellow-600'"
             ><MinusIcon class="border-l h-12"
