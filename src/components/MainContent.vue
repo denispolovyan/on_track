@@ -4,21 +4,11 @@ import TheProgress from '../pages/TheProgress.vue'
 import TheActivities from '../pages/TheActivities.vue'
 import NotFound from '../pages/NotFound.vue'
 
-import { PAGE_TIMELINE, PAGE_ACTIVITIES, PAGE_PROGRESS } from '../constants.js'
+import { PAGE_TIMELINE, PAGE_ACTIVITIES, PAGE_PROGRESS, ACTIVITIES_LIST } from '../constants.js'
 
 import { ref } from 'vue'
 
-let activities = ref([
-   { value: 1, name: 'Coding' },
-   { value: 2, name: 'Reading' },
-   { value: 3, name: 'Training' }
-])
-
-defineProps({
-   userActivities: {
-      type: Array
-   }
-})
+let activities = ref(ACTIVITIES_LIST)
 
 function deleteActivity(activityToDelete) {
    const filteredActivities = []

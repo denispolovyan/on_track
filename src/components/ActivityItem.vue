@@ -5,7 +5,7 @@ import BaseHorizontalButton from './BaseHorizontalButton.vue'
 
 import { MinusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
-import { timeList } from '../constants.js'
+import { TIME_LIST } from '../constants.js'
 
 import { ref } from 'vue'
 
@@ -36,7 +36,7 @@ function setSelectedActivity(activity) {
 </script>
 
 <template>
-   <li class="flex flex-col gap-2 border-b py-4">
+   <li class="flex flex-col gap-2 border-b border-slate-200 py-6">
       <div class="flex justify-between items-center border rounded-md bg-stone-100">
          <base-select
             :placeholder="'Rest'"
@@ -53,7 +53,7 @@ function setSelectedActivity(activity) {
       <div class="flex justify-between items-center border rounded-md bg-stone-100">
          <base-select
             :placeholder="'h:m'"
-            :optionsList="timeList"
+            :optionsList="TIME_LIST"
             :selected="secondsToComplete"
             @select="secondsToComplete = $event"
             class="border-r"

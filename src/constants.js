@@ -18,20 +18,19 @@ export const NAV_ITEMS = {
 
 // --- ACTIVITIES --- //
 
-export const optionsList = [
-   { value: 1, name: 'Coding' },
-   { value: 2, name: 'Reading' },
-   { value: 3, name: 'Training' }
-]
-
-export const timeList = [
+export const TIME_LIST = [
    { value: 1, name: '0:15' },
    { value: 2, name: '0:20' },
    { value: 3, name: '0:30' }
 ]
 
+export const ACTIVITIES_LIST = [
+   { value: 1, name: 'Coding' },
+   { value: 2, name: 'Reading' },
+   { value: 3, name: 'Training' }
+]
 // --- CONSTANTS --- //
 
 export const HOURS_IN_DAY = 24
 
-export const DEFAULT_TASKS_QUANTITY = 5
+export const DEFAULT_TASKS_QUANTITY = 1

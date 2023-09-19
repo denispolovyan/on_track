@@ -40,7 +40,7 @@ function addNewValue() {
          v-model="inputValue"
          :placeholder="placeholder"
          type="text"
-			maxlength="20"
+			maxlength="25"
          @input="error = false"
          class="outline-0 px-2 bg-stone-200 w-44 h-8 border-r duration-1000"
          :class="{
