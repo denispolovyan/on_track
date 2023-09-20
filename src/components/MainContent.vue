@@ -29,7 +29,17 @@ function deleteTask(id) {
 }
 
 function addActivity(activity) {
-   const length = activities.value.length + 1
+   let length = 1
+
+   const activitiesKeys = []
+   activities.value.forEach((el) => {
+      activitiesKeys.push(el.value)
+   })
+
+   while (activitiesKeys.includes(length)) {
+      length++
+   }
+
    activities.value.push({ value: length, name: activity })
 }
 
@@ -41,16 +51,24 @@ function deleteActivity(activityToDelete) {
       }
    })
    activities.value = filteredActivities
+
+   const activitiesKeys = []
+   activities.value.forEach((el) => {
+      activitiesKeys.push(el.value)
+   })
+   tasks.value.forEach((task) => {
+      if (task.activity == activityToDelete) {
+         task.activity = activitiesKeys[0]
+      }
+   })
 }
 
 function setSelectedActivity(activity) {
    tasks.value.filter((t) => t.id == activity.id)[0].activity = activity.value
-
 }
 
 function setSecondsToComplete(seconds) {
    tasks.value.filter((t) => t.id == seconds.id)[0].time = seconds.value
-
 }
 </script>
 

@@ -32,5 +32,3 @@ export const ACTIVITIES_LIST = [
 // --- CONSTANTS --- //
 
 export const HOURS_IN_DAY = 24
-
-export const DEFAULT_TASKS_QUANTITY = 1
