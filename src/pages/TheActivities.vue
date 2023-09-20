@@ -46,6 +46,7 @@ defineEmits({
    <div>
       <div class="flex flex-col gap-2">
          <base-input
+			class="w-full"
             @addNewValue="$emit('addActivity', $event)"
             :placeholder="'Create new activity'"
             ><PlusCircleIcon class="w-12"

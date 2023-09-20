@@ -41,7 +41,7 @@ function generateNewValue() {
          type="text"
          maxlength="25"
          @input="error = false"
-         class="outline-0 px-2 bg-stone-200 w-44 h-8 border-r duration-1000"
+         class="outline-0 px-2 bg-stone-200 w-full h-8 border-r duration-1000"
          :class="{
             'placeholder:text-red-500 text-red-500': error
          }"
