@@ -42,6 +42,16 @@ function deleteActivity(activityToDelete) {
    })
    activities.value = filteredActivities
 }
+
+function setSelectedActivity(activity) {
+   tasks.value.filter((t) => t.id == activity.id)[0].activity = activity.value
+
+}
+
+function setSecondsToComplete(seconds) {
+   tasks.value.filter((t) => t.id == seconds.id)[0].time = seconds.value
+
+}
 </script>
 
 <template>
@@ -53,6 +63,8 @@ function deleteActivity(activityToDelete) {
          @deleteActivity="deleteActivity($event)"
          @addTask="addTask()"
          @deleteTask="deleteTask($event)"
+         @setSelectedActivity="setSelectedActivity($event)"
+         @setSecondsToComplete="setSecondsToComplete($event)"
          :userActivities="activities"
          :tasks="tasks"
          v-else-if="$route['fullPath'].slice(2) == PAGE_ACTIVITIES"

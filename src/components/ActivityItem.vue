@@ -8,9 +8,8 @@ import { MinusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { TIME_LIST } from '../constants.js'
 
 import { ref } from 'vue'
-import { isNumberNull } from '../functions'
 
-defineProps({
+const props = defineProps({
    activities: {
       type: Array,
       required: true
@@ -30,13 +29,17 @@ defineEmits({
       type: Number,
       required: false
    },
-   deleteTask: {
-      type: Number,
+   setSelectedActivity: {
+      type: Object,
+      required: true
+   },
+   setSecondsToComplete: {
+      type: Object,
       required: true
    }
 })
 
-const secondsToComplete = ref(0)
+// const secondsToComplete = ref(props.task.time && 0)
 const selectedActivity = ref(0)
 
 function setSelectedActivity(activity) {
@@ -51,7 +54,10 @@ function setSelectedActivity(activity) {
             :placeholder="'Rest'"
             :optionsList="activities"
             :selected="task.activity"
-            @select="setSelectedActivity($event)"
+            @select="
+               $emit('setSelectedActivity', { value: $event, id: task.id }),
+                  setSelectedActivity($event)
+            "
          />
          <base-button
             @click="$emit('deleteActivity', selectedActivity)"
@@ -64,10 +70,12 @@ function setSelectedActivity(activity) {
             :placeholder="'h:m'"
             :optionsList="TIME_LIST"
             :selected="task.time"
-            @select="secondsToComplete = $event"
+            @select="$emit('setSecondsToComplete', { value: $event, id: task.id })"
             class="border-r"
          />
-         <base-button @click="secondsToComplete = 0" :background="'text-yellow-600'"
+         <base-button
+            @click="$emit('setSecondsToComplete', { value: 0, id: task.id })"
+            :background="'text-yellow-600'"
             ><MinusIcon class="border-l h-12"
          /></base-button>
       </div>

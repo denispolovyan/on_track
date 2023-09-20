@@ -30,7 +30,15 @@ defineEmits({
    deleteTask: {
       type: Number,
       required: true
-   }
+   },
+	setSelectedActivity: {
+		type: Object,
+		required: true
+	},
+	setSecondsToComplete: {
+		type: Object,
+		required: true
+	}
 })
 </script>
 
@@ -56,6 +64,8 @@ defineEmits({
             :task="task"
             @deleteActivity="$emit('deleteActivity', $event)"
             @deleteTask="$emit('deleteTask', $event)"
+				@setSelectedActivity="$emit('setSelectedActivity', $event)"
+				@setSecondsToComplete="$emit('setSecondsToComplete', $event)"
          />
       </ul>
    </div>
