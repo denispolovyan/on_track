@@ -11,8 +11,7 @@ defineProps({
 </script>
 
 <template>
-   <span class="p-1 rounded-md cursor-pointer"
-	:class="background" @click="$emit('clickButton')">
+   <span class="p-1 rounded-r-md cursor-pointer" :class="background" @click="$emit('clickButton')">
       <slot></slot>
    </span>
 </template>

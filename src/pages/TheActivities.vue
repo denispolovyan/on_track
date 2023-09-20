@@ -44,7 +44,7 @@ defineEmits({
 
 <template>
    <div>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 z-20">
          <base-input
 			class="w-full"
             @addNewValue="$emit('addActivity', $event)"

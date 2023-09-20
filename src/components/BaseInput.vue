@@ -46,7 +46,10 @@ function generateNewValue() {
             'placeholder:text-red-500 text-red-500': error
          }"
       />
-      <base-button @clickButton="generateNewValue()" :background="'text-lime-600'">
+      <base-button
+         @clickButton="generateNewValue()"
+         :background="'bg-green-500 hover:bg-green-700 duration-500 text-white'"
+      >
          <slot></slot
       ></base-button>
    </div>

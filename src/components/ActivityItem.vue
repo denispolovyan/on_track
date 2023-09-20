@@ -39,7 +39,6 @@ defineEmits({
    }
 })
 
-// const secondsToComplete = ref(props.task.time && 0)
 const selectedActivity = ref(0)
 
 function setSelectedActivity(activity) {
@@ -61,8 +60,8 @@ function setSelectedActivity(activity) {
          />
          <base-button
             @clickButton="$emit('deleteActivity', selectedActivity)"
-            :background="'text-rose-800'"
-            ><TrashIcon class="h-12 border-l"
+            :background="'bg-rose-600 hover:bg-rose-800 text-white duration-500'"
+            ><TrashIcon class="h-12"
          /></base-button>
       </div>
       <div class="flex justify-between items-center border rounded-md bg-stone-100">
@@ -75,8 +74,8 @@ function setSelectedActivity(activity) {
          />
          <base-button
             @clickButton="$emit('setSecondsToComplete', { value: 0, id: task.id })"
-            :background="'text-yellow-600'"
-            ><MinusIcon class="border-l h-12"
+            :background="'bg-yellow-500 text-white hover:bg-yellow-600 duration-500'"
+            ><MinusIcon class="h-12"
          /></base-button>
       </div>
       <BaseHorizontalButton
