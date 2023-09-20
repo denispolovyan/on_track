@@ -43,7 +43,7 @@ const hourItemClasses = [
             :selected="selected"
             @select="selected = $event"
          />
-         <base-button :background="'text-rose-600'" @click="selected = 0"
+         <base-button :background="'text-rose-600'" @clickButton="selected = 0"
             ><MinusCircleIcon class="w-12"
          /></base-button>
       </div>

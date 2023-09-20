@@ -60,7 +60,7 @@ function setSelectedActivity(activity) {
             "
          />
          <base-button
-            @click="$emit('deleteActivity', selectedActivity)"
+            @clickButton="$emit('deleteActivity', selectedActivity)"
             :background="'text-rose-800'"
             ><TrashIcon class="h-12 border-l"
          /></base-button>
@@ -74,7 +74,7 @@ function setSelectedActivity(activity) {
             class="border-r"
          />
          <base-button
-            @click="$emit('setSecondsToComplete', { value: 0, id: task.id })"
+            @clickButton="$emit('setSecondsToComplete', { value: 0, id: task.id })"
             :background="'text-yellow-600'"
             ><MinusIcon class="border-l h-12"
          /></base-button>

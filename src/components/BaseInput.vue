@@ -5,7 +5,6 @@ import { isPlaceholderValid, isInputValueValid } from '../validators.js'
 
 import { ref } from 'vue'
 
-
 defineProps({
    placeholder: {
       type: String,
@@ -24,7 +23,7 @@ const emit = defineEmits({
    }
 })
 
-function addNewValue() {
+function generateNewValue() {
    if (isInputValueValid(inputValue.value)) {
       emit('addNewValue', inputValue.value)
       inputValue.value = ''
@@ -40,13 +39,15 @@ function addNewValue() {
          v-model="inputValue"
          :placeholder="placeholder"
          type="text"
-			maxlength="25"
+         maxlength="25"
          @input="error = false"
          class="outline-0 px-2 bg-stone-200 w-44 h-8 border-r duration-1000"
          :class="{
             'placeholder:text-red-500 text-red-500': error
          }"
       />
-      <base-button @click="addNewValue()" :background="'text-lime-600'"> <slot></slot></base-button>
+      <base-button @clickButton="generateNewValue()" :background="'text-lime-600'">
+         <slot></slot
+      ></base-button>
    </div>
 </template>
