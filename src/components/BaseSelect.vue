@@ -44,6 +44,7 @@ const optionsListItem = ['w-44 h-14 px-2 bg-stone-100 truncate']
          :key="option.name"
          :value="option.value"
          :selected="option.value == selected"
+			class="capitalize"
       >
          {{ option.name }}
       </option>

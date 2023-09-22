@@ -16,13 +16,15 @@ export const NAV_ITEMS = {
    [PAGE_PROGRESS]: ClipboardDocumentListIcon
 }
 
-// --- ACTIVITIES --- //
+// --- Time --- //
 
 export const TIME_LIST = [
    { value: 1, name: '0:15' },
    { value: 2, name: '0:20' },
    { value: 3, name: '0:30' }
 ]
+
+// --- ACTIVITIES --- //
 
 export const ACTIVITIES_LIST = [
    { value: 1, name: 'Coding' },
