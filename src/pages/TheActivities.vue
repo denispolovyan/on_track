@@ -2,6 +2,7 @@
 import ActivityItem from '../components/ActivityItem.vue'
 import BaseInput from '../components/BaseInput.vue'
 import BaseHorizontalButton from '../components/BaseHorizontalButton.vue'
+import NoTaskComponent from '../components/NoTaskComponent.vue'
 
 import { PlusCircleIcon } from '@heroicons/vue/24/outline'
 
@@ -31,14 +32,14 @@ defineEmits({
       type: Number,
       required: true
    },
-	setSelectedActivity: {
-		type: Object,
-		required: true
-	},
-	setSecondsToComplete: {
-		type: Object,
-		required: true
-	}
+   setSelectedActivity: {
+      type: Object,
+      required: true
+   },
+   setSecondsToComplete: {
+      type: Object,
+      required: true
+   }
 })
 </script>
 
@@ -46,7 +47,7 @@ defineEmits({
    <div>
       <div class="flex flex-col gap-2 z-20">
          <base-input
-			class="w-full"
+            class="w-full"
             @addNewValue="$emit('addActivity', $event)"
             :placeholder="'Create new activity'"
             ><PlusCircleIcon class="w-12"
@@ -65,9 +66,10 @@ defineEmits({
             :task="task"
             @deleteActivity="$emit('deleteActivity', $event)"
             @deleteTask="$emit('deleteTask', $event)"
-				@setSelectedActivity="$emit('setSelectedActivity', $event)"
-				@setSecondsToComplete="$emit('setSecondsToComplete', $event)"
+            @setSelectedActivity="$emit('setSelectedActivity', $event)"
+            @setSecondsToComplete="$emit('setSecondsToComplete', $event)"
          />
       </ul>
+			<no-task-component v-if="!tasks.length" />
    </div>
 </template>
