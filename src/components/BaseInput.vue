@@ -3,7 +3,7 @@ import BaseButton from './BaseButton.vue'
 
 import { isPlaceholderValid, isStringNotNumber } from '../validators.js'
 
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 defineProps({
    placeholder: {
@@ -29,13 +29,28 @@ let inputValue = ref('')
 let error = ref(false)
 
 function generateNewValue() {
-   if (isStringNotNumber(inputValue.value)) {
+   if (isStringNotNumber(inputValue.value.trim())) {
       emit('addNewValue', inputValue.value)
       inputValue.value = ''
       return
    }
    error.value = true
 }
+
+function handleKeydown(e) {
+   if (e.key === 'Enter') {
+      e.preventDefault()
+      generateNewValue()
+   }
+}
+
+onMounted(() => {
+   document.addEventListener('keydown', handleKeydown)
+})
+
+onBeforeUnmount(() => {
+   document.removeEventListener('keydown', handleKeydown)
+})
 </script>
 
 <template>

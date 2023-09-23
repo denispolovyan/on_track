@@ -49,7 +49,7 @@ export function isInputValueValid(input) {
 // -- // ++
 
 export function isStringNotNumber(value) {
-   return !Number(value)
+   return !Number(value) && isNotNull(value)
 }
 
 // -- // ++

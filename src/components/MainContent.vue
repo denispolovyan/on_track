@@ -60,23 +60,17 @@ function deleteActivity(activityToDelete) {
    })
    activities.value = filteredActivities
 
-   // find existing activities
-   const activitiesKeys = []
-   activities.value.forEach((el) => {
-      activitiesKeys.push(el.value)
-   })
-
    // change task deleted activity
    tasks.value.forEach((task) => {
       if (task.activity == activityToDelete) {
-         task.activity = activitiesKeys[0]
+         task.activity = 0
       }
    })
 
    // change timeline deleted activity
    timelineList.value.forEach((el) => {
       if (el.activity == activityToDelete) {
-         el.activity = activitiesKeys[0]
+         el.activity = 0
       }
    })
 
