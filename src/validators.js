@@ -60,6 +60,17 @@ export function isIdValid(value) {
 
 // -- // ++
 
-export function isTaskValid(value){
-	return isNumber(value.id) && isNumber(value.time) && isNumber(value.activity)
+export function isTaskValid(value) {
+   return isNumber(value.id) && isNumber(value.time) && isNumber(value.activity)
+}
+
+// -- // ++
+
+export function isTimelineListValid(value) {
+   return value.every(({ hour, activity }) => isNumber(hour) && isNumber(activity))
+}
+
+// -- // ++
+export function isSelectedActivityValid({ hour, activity }) {
+   return isNumber(hour) && isNumber(activity)
 }

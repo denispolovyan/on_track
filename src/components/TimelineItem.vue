@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue'
 
 import BaseSelect from './BaseSelect.vue'
 import TimelineHour from './TimelineHour.vue'
@@ -13,9 +12,9 @@ const props = defineProps({
    timelineItem: {
       type: Object,
       required: true,
-		validator(value){
-			return isNumber(value.hour)
-		}
+      validator(value) {
+         return isNumber(value.hour)
+      }
    },
    activities: {
       type: Array,
@@ -33,12 +32,24 @@ const props = defineProps({
    }
 })
 
+const emit = defineEmits({
+   setSelectedActivity: {
+      type: Number,
+      required: true
+   }
+})
+
 let placeholder = 'Rest'
-let selected = ref(0)
 
 const hourItemClasses = [
    props.timelineItem.hour == new Date().getHours() ? 'bg-slate-300' : 'bg-slate-100'
 ]
+
+function setSelectedActivity(activity) {
+   if (isNumber(activity)) {
+      emit('setSelectedActivity', { activity: activity, hour: props.timelineItem.hour })
+   }
+}
 </script>
 
 <template>
@@ -56,12 +67,12 @@ const hourItemClasses = [
             class="border-r"
             :optionsList="activities"
             :placeholder="placeholder"
-            :selected="selected"
-            @select="selected = $event"
+            :selected="timelineItem.activity"
+            @select="setSelectedActivity($event)"
          />
          <base-button
             :background="'text-white bg-red-500 hover:bg-red-700 duration-500'"
-            @clickButton="selected = 0"
+            @clickButton="setSelectedActivity(0)"
             ><MinusCircleIcon class="w-12"
          /></base-button>
       </div>
