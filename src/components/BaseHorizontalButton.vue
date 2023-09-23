@@ -1,12 +1,20 @@
 <script setup>
+import { isString } from '../validators'
+
 defineProps({
    text: {
       type: String,
-      required: true
+      required: true,
+      validator(value) {
+         return isString(value)
+      }
    },
    color: {
       type: String,
-      required: false
+      required: false,
+      validator(value) {
+         return isString(value)
+      }
    }
 })
 

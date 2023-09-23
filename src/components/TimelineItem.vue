@@ -5,7 +5,7 @@ import BaseSelect from './BaseSelect.vue'
 import TimelineHour from './TimelineHour.vue'
 import BaseButton from './BaseButton.vue'
 
-import { isTimelineValid } from '../validators.js'
+import { isNumber, isOptionListValid } from '../validators.js'
 
 import { MinusCircleIcon } from '@heroicons/vue/24/outline'
 
@@ -13,17 +13,23 @@ const props = defineProps({
    timelineItem: {
       type: Object,
       required: true,
-      validator(timelineItem) {
-         return isTimelineValid(timelineItem)
-      }
+		validator(value){
+			return isNumber(value.hour)
+		}
    },
    activities: {
       type: Array,
-      required: false
+      required: false,
+      validator(value) {
+         return isOptionListValid(value)
+      }
    },
    id: {
       type: Number,
-      required: true
+      required: true,
+      validator(value) {
+         return isNumber(value)
+      }
    }
 })
 
@@ -40,7 +46,7 @@ const hourItemClasses = [
       <div class="text-center mb-8 relative">
          <timeline-hour
             :hour="timelineItem.hour"
-            class="items-center px-2 py-1 rounded-md bg-stone-200 border"
+            class="items-center px-2 py-1 rounded-md border"
             :class="hourItemClasses"
          />
          <div class="border-b -mt-3"></div>

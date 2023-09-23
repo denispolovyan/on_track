@@ -34,7 +34,7 @@ defineEmits({
    },
    setSelectedActivity: {
       type: Object,
-      required: true
+      required: true,
    },
    setSecondsToComplete: {
       type: Object,

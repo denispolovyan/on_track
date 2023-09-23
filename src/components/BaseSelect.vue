@@ -1,6 +1,9 @@
 <script setup>
-import { isOptionListValid } from '../validators.js'
+import { isOptionListValid, isPlaceholderValid } from '../validators.js'
+
 import { isNumberNull } from '../functions.js'
+import {  isNumber } from '../validators.js'
+
 
 defineProps({
    optionsList: {
@@ -12,30 +15,37 @@ defineProps({
    },
    placeholder: {
       type: String,
-      required: true
+		required: true,
+      validator(value) {
+         return isPlaceholderValid(value)
+      }
    },
    selected: {
       type: Number,
-      required: true
+      required: true,
+		validator(value){
+			return isNumber(value)
+		}
    }
 })
 
 const emit = defineEmits({
    select: {
-      type: Object,
-      required: false
+      type: Number,
+      required: true,
    }
 })
 
 function setSelectedActivity(activity) {
-   emit('select', activity)
-}
+   if(isNumber(activity)){
+		emit('select', activity)
+	}
 
-const optionsListItem = ['w-44 h-14 px-2 bg-stone-100 truncate']
+}
 </script>
 
 <template>
-   <select :class="optionsListItem" @change="setSelectedActivity(Number($event.target.value))">
+   <select class="w-44 h-14 px-2 bg-stone-100 truncate" @change="setSelectedActivity(Number($event.target.value))">
       <option :selected="isNumberNull(selected)" disabled>
          {{ placeholder }}
       </option>
@@ -44,7 +54,7 @@ const optionsListItem = ['w-44 h-14 px-2 bg-stone-100 truncate']
          :key="option.name"
          :value="option.value"
          :selected="option.value == selected"
-			class="capitalize"
+         class="capitalize"
       >
          {{ option.name }}
       </option>

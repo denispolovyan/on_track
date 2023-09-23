@@ -1,16 +1,19 @@
 <script setup>
 import { computed } from 'vue'
 
+
 const timelineHour = defineProps({
    hour: {
       type: Number,
-      required: true
+      required: true,
    }
 })
 
-const formatedHour = computed(() => {
+const formattedHourString =
+   timelineHour.hour >= 10 ? `${timelineHour.hour}:00` : `0${timelineHour.hour}:00`
 
-	return (timelineHour.hour >= 10) ? `${timelineHour.hour}:00` : `0${timelineHour.hour}:00`
+const formatedHour = computed(() => {
+   return typeof timelineHour.hour == 'number' ? formattedHourString : '--:--' 
 })
 </script>
 

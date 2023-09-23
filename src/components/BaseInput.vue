@@ -1,30 +1,35 @@
 <script setup>
 import BaseButton from './BaseButton.vue'
 
-import { isPlaceholderValid, isInputValueValid } from '../validators.js'
+import { isPlaceholderValid, isStringNotNumber } from '../validators.js'
 
 import { ref } from 'vue'
 
 defineProps({
    placeholder: {
       type: String,
-      required: true,
-      validator: isPlaceholderValid
+      required: false,
+      default() {
+         return 'Input'
+      },
+      validator(value) {
+         return isPlaceholderValid(value)
+      }
+   }
+})
+
+const emit = defineEmits({
+   addNewValue: {
+      type: String,
+      required: true
    }
 })
 
 let inputValue = ref('')
 let error = ref(false)
 
-const emit = defineEmits({
-   addNewValue: {
-      type: String,
-      validator: isInputValueValid
-   }
-})
-
 function generateNewValue() {
-   if (isInputValueValid(inputValue.value)) {
+   if (isStringNotNumber(inputValue.value)) {
       emit('addNewValue', inputValue.value)
       inputValue.value = ''
       return

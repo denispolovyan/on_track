@@ -5,9 +5,12 @@ defineProps({
    background: {
       type: String,
       required: true,
-      validator: isBackgroundClassValid
+      validator(value) {
+         return isBackgroundClassValid(value)
+      }
    }
 })
+
 </script>
 
 <template>

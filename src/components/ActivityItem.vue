@@ -7,42 +7,74 @@ import { MinusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
 import { TIME_LIST } from '../constants.js'
 
+import { isNumber, isOptionListValid, isTaskValid } from '../validators.js'
+
 import { ref } from 'vue'
 
-const props = defineProps({
+defineProps({
    activities: {
       type: Array,
-      required: true
+      required: true,
+      validator(value) {
+         return isOptionListValid(value)
+      }
    },
    task: {
       type: Object,
-      required: true
+      required: true,
+      validator(value) {
+         return isTaskValid(value)
+      }
    }
 })
 
-defineEmits({
+const emit = defineEmits({
    deleteTask: {
-      type: Object,
-      required: false
+      type: Number,
+      required: true
    },
    deleteActivity: {
       type: Number,
-      required: false
+      required: true
    },
    setSelectedActivity: {
-      type: Object,
+      type: Number,
       required: true
    },
    setSecondsToComplete: {
-      type: Object,
+      type: Number,
       required: true
    }
 })
 
 const selectedActivity = ref(0)
 
-function setSelectedActivity(activity) {
+function setSelectedActivity(activity, task) {
    selectedActivity.value = activity
+
+   if (isNumber(activity)) {
+      emit('setSelectedActivity', { value: activity, id: task.id })
+   }
+}
+
+function setSecondsToComplete(time, task, checkbox) {
+   if (isNumber(time) && checkbox) {
+      emit('setSecondsToComplete', { value: time, id: task.id })
+   } else {
+      emit('setSecondsToComplete', { value: 0, id: task.id })
+   }
+}
+
+function deleteTask(id){
+	if(isNumber(id)){
+		emit('deleteTask', id)
+	}
+}
+
+function deleteActivity(activity){
+	if(isNumber(activity)){
+		emit('deleteActivity', activity)
+	}
 }
 </script>
 
@@ -53,13 +85,10 @@ function setSelectedActivity(activity) {
             :placeholder="'Rest'"
             :optionsList="activities"
             :selected="task.activity"
-            @select="
-               $emit('setSelectedActivity', { value: $event, id: task.id }),
-                  setSelectedActivity($event)
-            "
+            @select="setSelectedActivity($event, task)"
          />
          <base-button
-            @clickButton="$emit('deleteActivity', selectedActivity)"
+            @clickButton="deleteActivity(selectedActivity)"
             :background="'bg-rose-600 hover:bg-rose-800 text-white duration-500'"
             ><TrashIcon class="h-12"
          /></base-button>
@@ -69,17 +98,17 @@ function setSelectedActivity(activity) {
             :placeholder="'h:m'"
             :optionsList="TIME_LIST"
             :selected="task.time"
-            @select="$emit('setSecondsToComplete', { value: $event, id: task.id })"
+            @select="setSecondsToComplete($event, task, true)"
             class="border-r"
          />
          <base-button
-            @clickButton="$emit('setSecondsToComplete', { value: 0, id: task.id })"
+            @clickButton="setSecondsToComplete($event, task, false)"
             :background="'bg-yellow-500 text-white hover:bg-yellow-600 duration-500'"
             ><MinusIcon class="h-12"
          /></base-button>
       </div>
       <BaseHorizontalButton
-         @clickButton="$emit('deleteTask', task.id)"
+         @clickButton="deleteTask(task.id)"
          :text="'delete task'"
          :color="'text-black hover:text-white hover:bg-red-500  bg-stone-100'"
       />

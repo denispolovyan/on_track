@@ -70,6 +70,7 @@ function setSelectedActivity(activity) {
 function setSecondsToComplete(seconds) {
    tasks.value.filter((t) => t.id == seconds.id)[0].time = seconds.value
 }
+
 </script>
 
 <template>
