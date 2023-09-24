@@ -6,7 +6,7 @@ import NotFound from '../pages/NotFound.vue'
 
 import { PAGE_TIMELINE, PAGE_ACTIVITIES, PAGE_PROGRESS, ACTIVITIES_LIST } from '../constants.js'
 
-import { generateTimelineList } from '../functions.js'
+import { generateTimelineList, generateActivityTimes } from '../functions.js'
 
 import { ref, onMounted } from 'vue'
 
@@ -121,6 +121,7 @@ onMounted(() => {
       <the-timeline
          :activities="activities"
          :timelineList="timelineList"
+         :userActivities="activities"
          @setSelectedActivity="setSelectedTimelineActivity($event)"
          v-if="$route['fullPath'].slice(2) == PAGE_TIMELINE"
       />

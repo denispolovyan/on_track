@@ -8,7 +8,7 @@ defineProps({
       validator(value) {
          return isBackgroundClassValid(value)
       }
-   }
+   },
 })
 
 </script>

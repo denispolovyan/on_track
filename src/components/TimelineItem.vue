@@ -1,8 +1,8 @@
 <script setup>
-
 import BaseSelect from './BaseSelect.vue'
 import TimelineHour from './TimelineHour.vue'
 import BaseButton from './BaseButton.vue'
+import TimelineTimer from './TimelineTimer.vue'
 
 import { isNumber, isOptionListValid } from '../validators.js'
 
@@ -54,7 +54,7 @@ function setSelectedActivity(activity) {
 
 <template>
    <li class="flex flex-col" :id="id">
-      <div class="text-center mb-8 relative">
+      <div class="text-center mb-6 relative">
          <timeline-hour
             :hour="timelineItem.hour"
             class="items-center px-2 py-1 rounded-md border"
@@ -62,7 +62,8 @@ function setSelectedActivity(activity) {
          />
          <div class="border-b -mt-3"></div>
       </div>
-      <div class="border flex items-center justify-between rounded-md bg-zinc-100">
+      <div class="flex flex-col gap-2">
+			<div class="border flex items-center justify-between rounded-md bg-zinc-100">
          <base-select
             class="border-r"
             :optionsList="activities"
@@ -76,5 +77,7 @@ function setSelectedActivity(activity) {
             ><MinusCircleIcon class="w-12"
          /></base-button>
       </div>
+      <timeline-timer :seconds="600"/>
+		</div>
    </li>
 </template>

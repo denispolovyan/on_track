@@ -27,8 +27,8 @@ const emit = defineEmits({
 })
 
 onMounted(() => {
-   const timelineItemHeight = 134
-   const yCoord = new Date().getHours() * timelineItemHeight
+   const timelineItemHeight = 198
+   const yCoord = (new Date().getHours()) * timelineItemHeight
    window.scrollTo({ top: yCoord, behavior: 'smooth' })
 })
 
@@ -41,7 +41,7 @@ function setSelectedActivity(activity) {
 
 <template>
    <div>
-      <ul class="flex flex-col gap-8 my-4">
+      <ul class="flex flex-col gap-10 my-4">
          <timeline-item
             v-for="timelineItem in timelineList"
             @setSelectedActivity="setSelectedActivity($event)"

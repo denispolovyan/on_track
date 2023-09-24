@@ -5,9 +5,9 @@ import BaseHorizontalButton from './BaseHorizontalButton.vue'
 
 import { MinusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
-import { TIME_LIST } from '../constants.js'
-
 import { isNumber, isOptionListValid, isTaskValid } from '../validators.js'
+
+import { generateActivityTimes } from '../functions.js'
 
 import { ref } from 'vue'
 
@@ -65,16 +65,16 @@ function setSecondsToComplete(time, task, checkbox) {
    }
 }
 
-function deleteTask(id){
-	if(isNumber(id)){
-		emit('deleteTask', id)
-	}
+function deleteTask(id) {
+   if (isNumber(id)) {
+      emit('deleteTask', id)
+   }
 }
 
-function deleteActivity(activity){
-	if(isNumber(activity)){
-		emit('deleteActivity', activity)
-	}
+function deleteActivity(activity) {
+   if (isNumber(activity)) {
+      emit('deleteActivity', activity)
+   }
 }
 </script>
 
@@ -95,8 +95,8 @@ function deleteActivity(activity){
       </div>
       <div class="flex justify-between items-center border rounded-md bg-stone-100">
          <base-select
-            :placeholder="'h:m'"
-            :optionsList="TIME_LIST"
+            :placeholder="'h:m:s'"
+            :optionsList="generateActivityTimes()"
             :selected="task.time"
             @select="setSecondsToComplete($event, task, true)"
             class="border-r"
