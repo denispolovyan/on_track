@@ -2,13 +2,16 @@
 import TimelineItem from '../components/TimelineItem.vue'
 
 // import { generateTimelineItems } from '../functions.js'
-import { isTimelineListValid, isSelectedActivityValid } from '../validators.js'
+import { isTimelineListValid, isSelectedActivityValid, isTasksValid, isActivitiesValid } from '../validators.js'
 import { onMounted } from 'vue'
 
 defineProps({
    activities: {
       type: Array,
-      required: false
+      required: true,
+		validator(value) {
+         return isActivitiesValid(value)
+      }
    },
    timelineList: {
       type: Array,
@@ -16,7 +19,14 @@ defineProps({
       validator(value) {
          return isTimelineListValid(value)
       }
-   }
+   },
+	tasks: {
+		type: Array,
+		required: false,
+		validator(value) {
+         return isTasksValid(value)
+      }
+	}
 })
 
 const emit = defineEmits({
@@ -49,6 +59,7 @@ function setSelectedActivity(activity) {
             :timelineItem="timelineItem"
             :activities="activities"
             :id="timelineItem.hour"
+				:tasks="tasks"
          />
       </ul>
    </div>

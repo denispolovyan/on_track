@@ -5,7 +5,7 @@ import BaseHorizontalButton from './BaseHorizontalButton.vue'
 
 import { MinusIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
-import { isNumber, isOptionListValid, isTaskValid } from '../validators.js'
+import { isNumber, isOptionListValid, isTaskValid, isTasksValid } from '../validators.js'
 
 import { generateActivityTimes } from '../functions.js'
 
@@ -24,6 +24,13 @@ defineProps({
       required: true,
       validator(value) {
          return isTaskValid(value)
+      }
+   },
+   tasks: {
+      type: Array,
+      required: false,
+      validator(value) {
+         return isTasksValid(value)
       }
    }
 })
@@ -85,6 +92,7 @@ function deleteActivity(activity) {
             :placeholder="'Rest'"
             :optionsList="activities"
             :selected="task.activity"
+				:tasks="tasks"
             @select="setSelectedActivity($event, task)"
          />
          <base-button

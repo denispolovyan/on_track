@@ -4,16 +4,26 @@ import BaseInput from '../components/BaseInput.vue'
 import BaseHorizontalButton from '../components/BaseHorizontalButton.vue'
 import NoTaskComponent from '../components/NoTaskComponent.vue'
 
+import { isTasksValid, isActivitiesValid } from '../validators.js'
+
 import { PlusCircleIcon } from '@heroicons/vue/24/outline'
+
+import {computed} from 'vue'
 
 defineProps({
    userActivities: {
       type: Array,
-      required: false
+      required: false,
+      validator(value) {
+         return isActivitiesValid(value)
+      }
    },
    tasks: {
       type: Array,
-      required: false
+      required: false,
+      validator(value) {
+         return isTasksValid(value)
+      }
    }
 })
 
@@ -34,13 +44,14 @@ defineEmits({
    },
    setSelectedActivity: {
       type: Object,
-      required: true,
+      required: true
    },
    setSecondsToComplete: {
       type: Object,
       required: true
    }
 })
+
 </script>
 
 <template>
@@ -50,6 +61,7 @@ defineEmits({
             class="w-full"
             @addNewValue="$emit('addActivity', $event)"
             :placeholder="'Create new activity'"
+				:userActivities="userActivities"
             ><PlusCircleIcon class="w-12"
          /></base-input>
          <base-horizontal-button
@@ -64,12 +76,13 @@ defineEmits({
             :key="task.id"
             :activities="userActivities"
             :task="task"
+				:tasks="tasks"
             @deleteActivity="$emit('deleteActivity', $event)"
             @deleteTask="$emit('deleteTask', $event)"
             @setSelectedActivity="$emit('setSelectedActivity', $event)"
             @setSecondsToComplete="$emit('setSecondsToComplete', $event)"
          />
       </ul>
-			<no-task-component v-if="!tasks.length" />
+      <no-task-component v-if="!tasks.length" />
    </div>
 </template>

@@ -2,10 +2,12 @@
 import { isOptionListValid, isPlaceholderValid } from '../validators.js'
 
 import { isNumberNull } from '../functions.js'
-import {  isNumber } from '../validators.js'
 
+import { isNumber, isTasksValid } from '../validators.js'
 
-defineProps({
+import { onMounted, ref, watch } from 'vue'
+
+const prop = defineProps({
    optionsList: {
       type: Array,
       required: true,
@@ -15,7 +17,7 @@ defineProps({
    },
    placeholder: {
       type: String,
-		required: true,
+      required: true,
       validator(value) {
          return isPlaceholderValid(value)
       }
@@ -23,29 +25,61 @@ defineProps({
    selected: {
       type: Number,
       required: true,
-		validator(value){
-			return isNumber(value)
-		}
+      validator(value) {
+         return isNumber(value)
+      }
+   },
+   tasks: {
+      type: Array,
+      required: false,
+      validator(value) {
+         return isTasksValid(value)
+      }
    }
 })
 
 const emit = defineEmits({
    select: {
       type: Number,
-      required: true,
+      required: true
    }
 })
 
-function setSelectedActivity(activity) {
-   if(isNumber(activity)){
-		emit('select', activity)
-	}
+const disabledActivities = ref([])
 
+function setSelectedActivity(activity) {
+   if (prop.tasks) {
+		disabledActivities.value = []
+      prop.tasks.forEach((task) => {
+			if(task.activity != activity) {
+				disabledActivities.value.push(task.activity)
+         }
+      })
+   }
+
+   if (isNumber(activity)) {
+      emit('select', activity)
+   }
 }
+
+onMounted(() => {
+   setSelectedActivity(prop.selected)
+})
+
+watch(
+   () => prop.tasks,
+   () => {
+      setSelectedActivity()
+   },
+	{deep: true}
+)
 </script>
 
 <template>
-   <select class="w-44 h-14 px-2 bg-stone-100 truncate" @change="setSelectedActivity(Number($event.target.value))">
+   <select
+      class="w-44 h-14 px-2 bg-stone-100 truncate"
+      @change="setSelectedActivity(Number($event.target.value))"
+   >
       <option :selected="isNumberNull(selected)" disabled>
          {{ placeholder }}
       </option>
@@ -54,6 +88,7 @@ function setSelectedActivity(activity) {
          :key="option.name"
          :value="option.value"
          :selected="option.value == selected"
+         :disabled="disabledActivities.includes(option.value)"
          class="capitalize"
       >
          {{ option.name }}

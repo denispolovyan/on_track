@@ -71,6 +71,21 @@ export function isTimelineListValid(value) {
 }
 
 // -- // ++
+
 export function isSelectedActivityValid({ hour, activity }) {
    return isNumber(hour) && isNumber(activity)
+}
+
+// -- // ++
+
+export function isTasksValid(value) {
+   return value.every(
+      ({ activity, time, id }) => isNumber(activity) && isNumber(time) && isNumber(id)
+   )
+}
+
+// -- // ++
+
+export function isActivitiesValid(value) {
+   return value.every(({ value, name }) => isNumber(value) && isString(name))
 }

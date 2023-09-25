@@ -1,11 +1,11 @@
 <script setup>
 import BaseButton from './BaseButton.vue'
 
-import { isPlaceholderValid, isStringNotNumber } from '../validators.js'
+import { isPlaceholderValid, isStringNotNumber, isActivitiesValid } from '../validators.js'
 
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-defineProps({
+const prop = defineProps({
    placeholder: {
       type: String,
       required: false,
@@ -14,6 +14,13 @@ defineProps({
       },
       validator(value) {
          return isPlaceholderValid(value)
+      }
+   },
+   userActivities: {
+      type: Array,
+      required: false,
+      validator(value) {
+         return isActivitiesValid(value)
       }
    }
 })
@@ -29,7 +36,14 @@ let inputValue = ref('')
 let error = ref(false)
 
 function generateNewValue() {
-   if (isStringNotNumber(inputValue.value.trim())) {
+   let notActivityCoincidence = true
+   prop.userActivities.forEach((activity) => {
+      if (activity.name == inputValue.value.trim()) {
+         notActivityCoincidence = false
+      }
+   })
+
+   if (isStringNotNumber(inputValue.value.trim()) && notActivityCoincidence) {
       emit('addNewValue', inputValue.value)
       inputValue.value = ''
       return
