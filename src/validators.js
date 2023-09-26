@@ -89,3 +89,9 @@ export function isTasksValid(value) {
 export function isActivitiesValid(value) {
    return value.every(({ value, name }) => isNumber(value) && isString(name))
 }
+
+// -- // ++
+
+export function isActivityTimesValid(value) {
+   return value.every(({ name, value }) => isNumber(value) && isString(name))
+}

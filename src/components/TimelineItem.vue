@@ -1,14 +1,16 @@
 <script setup>
+import TimelineTimer from './TimelineTimer.vue'
 import BaseSelect from './BaseSelect.vue'
 import TimelineHour from './TimelineHour.vue'
 import BaseButton from './BaseButton.vue'
-import TimelineTimer from './TimelineTimer.vue'
 
-import { isNumber, isOptionListValid, isTasksValid } from '../validators.js'
+import { isNumber, isOptionListValid, isTasksValid, isActivityTimesValid } from '../validators.js'
+
+import {SECONDS_QUANTITY_ARRAY} from '../constants.js'
 
 import { MinusCircleIcon } from '@heroicons/vue/24/outline'
 
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 
 const emit = defineEmits({
    setSelectedActivity: {
@@ -45,6 +47,13 @@ const props = defineProps({
       validator(value) {
          return isTasksValid(value)
       }
+   },
+   activityTimes: {
+      type: Array,
+      required: true,
+      validator(value) {
+         return isActivityTimesValid(value)
+      }
    }
 })
 
@@ -66,11 +75,18 @@ let selectedActivity = ref()
 function setProperTime() {
    let selectedTask = props.tasks.filter((t) => t.activity == selectedActivity.value)[0]
    let taskTime = 0
+	
    for (let el in selectedTask) {
       if (el == 'time') {
          taskTime = selectedTask[el]
       }
    }
+
+   props.activityTimes.forEach((el) => {
+      if (el.value == taskTime) {
+         taskTime = SECONDS_QUANTITY_ARRAY[el.value-1]
+      }
+   })
    return taskTime
 }
 

@@ -8,8 +8,6 @@ import { isTasksValid, isActivitiesValid } from '../validators.js'
 
 import { PlusCircleIcon } from '@heroicons/vue/24/outline'
 
-import {computed} from 'vue'
-
 defineProps({
    userActivities: {
       type: Array,

@@ -1,7 +1,7 @@
 <script setup>
 import TimelineItem from '../components/TimelineItem.vue'
 
-// import { generateTimelineItems } from '../functions.js'
+import { generateActivityTimes } from '../functions.js'
 import { isTimelineListValid, isSelectedActivityValid, isTasksValid, isActivitiesValid } from '../validators.js'
 import { onMounted } from 'vue'
 
@@ -36,6 +36,8 @@ const emit = defineEmits({
    }
 })
 
+const activityTimes = generateActivityTimes()
+
 onMounted(() => {
    const timelineItemHeight = 198
    const yCoord = (new Date().getHours()) * timelineItemHeight
@@ -55,6 +57,7 @@ function setSelectedActivity(activity) {
          <timeline-item
             v-for="timelineItem in timelineList"
             @setSelectedActivity="setSelectedActivity($event)"
+				:activityTimes="activityTimes"
             :key="timelineItem.hour"
             :timelineItem="timelineItem"
             :activities="activities"

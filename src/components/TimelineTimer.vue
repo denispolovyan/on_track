@@ -7,7 +7,7 @@ import { isNumber } from '../validators.js'
 
 import { normalizeTime } from '../functions'
 
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
 const props = defineProps({
    seconds: {
@@ -28,7 +28,11 @@ const isRunning = ref(false)
 function start() {
    if (time.value) {
       isRunning.value = setInterval(() => {
-         time.value = time.value - 1
+         if (time.value) {
+            time.value = time.value - 1
+         } else {
+            stop()
+         }
       }, 1000)
    }
 }
@@ -43,6 +47,19 @@ function reset() {
    isRunning.value = false
    time.value = 0
 }
+
+onMounted(() => {
+   setTimeout(() => {
+      time.value = props.seconds
+   }, 500)
+})
+
+watch(
+   () => props.seconds,
+   () => {
+      time.value = props.seconds
+   }
+)
 </script>
 
 <template>
@@ -58,7 +75,9 @@ function reset() {
          <BaseButton
             v-else
             @click="start()"
-            :background="`duration-500 text-white rounded-md ${!time ? 'bg-green-200 cursor-auto' :'bg-green-500 hover:bg-green-700' }`"
+            :background="`duration-500 text-white rounded-md ${
+               !time ? 'bg-green-200 cursor-auto' : 'bg-green-500 hover:bg-green-700'
+            }`"
          >
             <ChevronRightIcon class="w-12"
          /></BaseButton>
