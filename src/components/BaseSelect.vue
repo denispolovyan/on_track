@@ -49,10 +49,10 @@ const disabledActivities = ref([])
 
 function setSelectedActivity(activity) {
    if (prop.tasks) {
-		disabledActivities.value = []
+      disabledActivities.value = []
       prop.tasks.forEach((task) => {
-			if(task.activity != activity) {
-				disabledActivities.value.push(task.activity)
+         if (task.activity != activity) {
+            disabledActivities.value.push(task.activity)
          }
       })
    }
@@ -71,7 +71,7 @@ watch(
    () => {
       setSelectedActivity()
    },
-	{deep: true}
+   { deep: true }
 )
 </script>
 

@@ -22,6 +22,16 @@ const props = defineProps({
    }
 })
 
+const emits = defineEmits({
+	setSeconds: {
+		type: Number,
+      required: false,
+      validator(value) {
+         return isNumber(value)
+      } 
+	}
+})
+
 let time = ref(props.seconds)
 const isRunning = ref(false)
 
@@ -30,6 +40,7 @@ function start() {
       isRunning.value = setInterval(() => {
          if (time.value) {
             time.value = time.value - 1
+				emits('setSeconds', time.value)
          } else {
             stop()
          }
@@ -45,7 +56,8 @@ function stop() {
 function reset() {
    clearInterval(isRunning.value)
    isRunning.value = false
-   time.value = 0
+   time.value = props.seconds
+	emits('setSeconds', time.value)
 }
 
 onMounted(() => {

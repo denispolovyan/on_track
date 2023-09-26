@@ -6,7 +6,7 @@ import BaseButton from './BaseButton.vue'
 
 import { isNumber, isOptionListValid, isTasksValid, isActivityTimesValid } from '../validators.js'
 
-import {SECONDS_QUANTITY_ARRAY} from '../constants.js'
+import { SECONDS_QUANTITY_ARRAY } from '../constants.js'
 
 import { MinusCircleIcon } from '@heroicons/vue/24/outline'
 
@@ -16,6 +16,10 @@ const emit = defineEmits({
    setSelectedActivity: {
       type: Number,
       required: true
+   },
+   setSeconds: {
+      type: Object,
+      required: false
    }
 })
 
@@ -54,6 +58,13 @@ const props = defineProps({
       validator(value) {
          return isActivityTimesValid(value)
       }
+   },
+   secondsValue: {
+      type: Array,
+      required: false,
+      validator(value) {
+         return isTasksValid(value)
+      }
    }
 })
 
@@ -75,7 +86,7 @@ let selectedActivity = ref()
 function setProperTime() {
    let selectedTask = props.tasks.filter((t) => t.activity == selectedActivity.value)[0]
    let taskTime = 0
-	
+
    for (let el in selectedTask) {
       if (el == 'time') {
          taskTime = selectedTask[el]
@@ -84,10 +95,26 @@ function setProperTime() {
 
    props.activityTimes.forEach((el) => {
       if (el.value == taskTime) {
-         taskTime = SECONDS_QUANTITY_ARRAY[el.value-1]
+         taskTime = SECONDS_QUANTITY_ARRAY[el.value - 1]
       }
    })
    return taskTime
+}
+
+function setSeconds(seconds) {
+   let activity = props.timelineItem.activity
+   let id = 0
+   let timeValue = 0
+
+   props.tasks.forEach((el) => {
+      if (el.activity == activity) {
+         id = el.id
+         timeValue = el.time
+      }
+   })
+
+   const data = { activity: activity, id: id, time: seconds, timeValue: timeValue }
+   emit('setSeconds', data)
 }
 
 watch(
@@ -123,7 +150,7 @@ watch(
                ><MinusCircleIcon class="w-12"
             /></base-button>
          </div>
-         <timeline-timer :seconds="setProperTime()" />
+         <timeline-timer :seconds="setProperTime()" @setSeconds="setSeconds($event)" />
       </div>
    </li>
 </template>

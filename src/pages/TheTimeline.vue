@@ -2,14 +2,19 @@
 import TimelineItem from '../components/TimelineItem.vue'
 
 import { generateActivityTimes } from '../functions.js'
-import { isTimelineListValid, isSelectedActivityValid, isTasksValid, isActivitiesValid } from '../validators.js'
+import {
+   isTimelineListValid,
+   isSelectedActivityValid,
+   isTasksValid,
+   isActivitiesValid,
+} from '../validators.js'
 import { onMounted } from 'vue'
 
 defineProps({
    activities: {
       type: Array,
       required: true,
-		validator(value) {
+      validator(value) {
          return isActivitiesValid(value)
       }
    },
@@ -20,19 +25,30 @@ defineProps({
          return isTimelineListValid(value)
       }
    },
-	tasks: {
-		type: Array,
-		required: false,
-		validator(value) {
+   tasks: {
+      type: Array,
+      required: false,
+      validator(value) {
          return isTasksValid(value)
       }
-	}
+   },
+   secondsValue: {
+      type: Array,
+      required: false,
+      validator(value) {
+         return isTasksValid(value)
+      }
+   }
 })
 
 const emit = defineEmits({
    setSelectedActivity: {
       type: Object,
       required: true
+   },
+   setSeconds: {
+      type: Object,
+      required: false
    }
 })
 
@@ -40,13 +56,13 @@ const activityTimes = generateActivityTimes()
 
 onMounted(() => {
    const timelineItemHeight = 198
-   const yCoord = (new Date().getHours()) * timelineItemHeight
+   const yCoord = new Date().getHours() * timelineItemHeight
    window.scrollTo({ top: yCoord, behavior: 'smooth' })
 })
 
 function setSelectedActivity(activity) {
    if (isSelectedActivityValid(activity)) {
-		emit('setSelectedActivity', activity)
+      emit('setSelectedActivity', activity)
    }
 }
 </script>
@@ -57,12 +73,14 @@ function setSelectedActivity(activity) {
          <timeline-item
             v-for="timelineItem in timelineList"
             @setSelectedActivity="setSelectedActivity($event)"
-				:activityTimes="activityTimes"
+            @setSeconds="$emit('setSeconds', $event)"
+            :activityTimes="activityTimes"
             :key="timelineItem.hour"
             :timelineItem="timelineItem"
             :activities="activities"
             :id="timelineItem.hour"
-				:tasks="tasks"
+            :tasks="tasks"
+            :secondsValue="secondsValue"
          />
       </ul>
    </div>

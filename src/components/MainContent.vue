@@ -4,7 +4,13 @@ import TheProgress from '../pages/TheProgress.vue'
 import TheActivities from '../pages/TheActivities.vue'
 import NotFound from '../pages/NotFound.vue'
 
-import { PAGE_TIMELINE, PAGE_ACTIVITIES, PAGE_PROGRESS, ACTIVITIES_LIST } from '../constants.js'
+import {
+   PAGE_TIMELINE,
+   PAGE_ACTIVITIES,
+   PAGE_PROGRESS,
+   ACTIVITIES_LIST,
+   SECONDS_QUANTITY_ARRAY
+} from '../constants.js'
 
 import { generateTimelineList } from '../functions.js'
 
@@ -15,6 +21,8 @@ let activities = ref(ACTIVITIES_LIST)
 let timelineList = ref(generateTimelineList())
 
 let tasks = ref([])
+
+let secondsValue = ref([])
 
 function addTask() {
    const id = tasks.value.length + 1
@@ -32,6 +40,11 @@ function deleteTask(id) {
    })
    tasks.value = filteredTasks
    localStorage.setItem('tasks-list', JSON.stringify(tasks.value))
+
+   if (secondsValue.value.length) {
+      secondsValue.value = secondsValue.value.filter((t) => t.id != id)
+   }
+   localStorage.setItem('seconds-list', JSON.stringify(secondsValue.value))
 }
 
 function addActivity(activity) {
@@ -64,6 +77,7 @@ function deleteActivity(activityToDelete) {
    tasks.value.forEach((task) => {
       if (task.activity == activityToDelete) {
          task.activity = 0
+         task.time = 0
       }
    })
 
@@ -74,19 +88,67 @@ function deleteActivity(activityToDelete) {
       }
    })
 
+   // delete seconds list item
+   secondsValue.value.forEach((el) => {
+      if (el.activity == activityToDelete) {
+         el.activity = 0
+         el.time = 0
+         el.timeValue = 0
+      }
+   })
+
    localStorage.setItem('tasks-list', JSON.stringify(tasks.value))
    localStorage.setItem('activity-list', JSON.stringify(activities.value))
    localStorage.setItem('timeline-list', JSON.stringify(timelineList.value))
+   localStorage.setItem('seconds-list', JSON.stringify(secondsValue.value))
 }
 
 function setSelectedActivity(activity) {
    tasks.value.filter((t) => t.id == activity.id)[0].activity = activity.value
    localStorage.setItem('tasks-list', JSON.stringify(tasks.value))
+   if (secondsValue.value.length) {
+      const selectedTime = secondsValue.value.filter((t) => t.id == activity.id)[0]
+      if (selectedTime) {
+         selectedTime.activity = activity.value
+      }
+   }
+   localStorage.setItem('seconds-list', JSON.stringify(secondsValue.value))
 }
 
 function setSecondsToComplete(seconds) {
    tasks.value.filter((t) => t.id == seconds.id)[0].time = seconds.value
    localStorage.setItem('tasks-list', JSON.stringify(tasks.value))
+   let checkbox = false
+
+   secondsValue.value.forEach((el) => {
+      if (el.id == seconds.id || el.activity == seconds.activity) {
+         checkbox = true
+      }
+   })
+
+	secondsValue.value.forEach((el) => {
+		console.log(el.id, '=', seconds.id)
+		console.log(el.activity, '=', seconds.activity)
+   })
+	console.log(seconds)
+	
+	
+
+   if (secondsValue.value.length && checkbox) {
+      const coincidence = secondsValue.value.filter((t) => t.timeValue == seconds.value)
+
+      if (!coincidence[0]) {
+         secondsValue.value.filter((t) => t.id == seconds.id)[0].time =
+            SECONDS_QUANTITY_ARRAY[seconds.value - 1]
+
+         secondsValue.value.filter((t) => t.id == seconds.id)[0].timeValue = seconds.value
+      }
+   }
+
+   if (!seconds.value && secondsValue.value.length && checkbox) {
+      secondsValue.value.filter((t) => t.id == seconds.id)[0].time = 0
+   }
+   localStorage.setItem('seconds-list', JSON.stringify(secondsValue.value))
 }
 
 function setSelectedTimelineActivity({ hour, activity }) {
@@ -96,6 +158,20 @@ function setSelectedTimelineActivity({ hour, activity }) {
       }
    })
    localStorage.setItem('timeline-list', JSON.stringify(timelineList.value))
+}
+
+function setSeconds(data) {
+   secondsValue.value = secondsValue.value.filter((t) => t.id != data.id)
+   secondsValue.value.push(data)
+   localStorage.setItem('seconds-list', JSON.stringify(secondsValue.value))
+   if (!data.time) {
+      tasks.value.forEach((task) => {
+         if (task.id == data.id) {
+            task.time = 0
+            localStorage.setItem('tasks-list', JSON.stringify(tasks.value))
+         }
+      })
+   }
 }
 
 onMounted(() => {
@@ -113,6 +189,11 @@ onMounted(() => {
    if (JSON.parse(timelineHourList)) {
       timelineList.value = JSON.parse(timelineHourList)
    }
+
+   const secondsValueList = localStorage.getItem('seconds-list')
+   if (JSON.parse(secondsValueList)) {
+      secondsValue.value = JSON.parse(secondsValueList)
+   }
 })
 </script>
 
@@ -121,8 +202,10 @@ onMounted(() => {
       <the-timeline
          :activities="activities"
          :timelineList="timelineList"
-			:tasks="tasks"
+         :tasks="tasks"
+         :secondsValue="secondsValue"
          @setSelectedActivity="setSelectedTimelineActivity($event)"
+         @setSeconds="setSeconds($event)"
          v-if="$route['fullPath'].slice(2) == PAGE_TIMELINE"
       />
       <the-progress v-else-if="$route['fullPath'].slice(2) == PAGE_PROGRESS" />
