@@ -24,11 +24,8 @@ const props = defineProps({
 
 const emits = defineEmits({
 	setSeconds: {
-		type: Number,
+		type: Object,
       required: false,
-      validator(value) {
-         return isNumber(value)
-      } 
 	}
 })
 
@@ -40,7 +37,7 @@ function start() {
       isRunning.value = setInterval(() => {
          if (time.value) {
             time.value = time.value - 1
-				emits('setSeconds', time.value)
+				emits('setSeconds', {seconds: time.value, checkbox: false})
          } else {
             stop()
          }
@@ -57,7 +54,7 @@ function reset() {
    clearInterval(isRunning.value)
    isRunning.value = false
    time.value = props.seconds
-	emits('setSeconds', time.value)
+	emits('setSeconds', {seconds: time.value, checkbox: true})
 }
 
 onMounted(() => {

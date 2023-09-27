@@ -87,6 +87,14 @@ function setProperTime() {
    let selectedTask = props.tasks.filter((t) => t.activity == selectedActivity.value)[0]
    let taskTime = 0
 
+   let currentTime = props.secondsValue.filter((t) => t.activity == selectedActivity.value)[0]
+   for (let el in currentTime) {
+      if (el == 'time') {
+         currentTime = currentTime[el]
+			return currentTime
+      }
+   }
+
    for (let el in selectedTask) {
       if (el == 'time') {
          taskTime = selectedTask[el]
@@ -96,12 +104,12 @@ function setProperTime() {
    props.activityTimes.forEach((el) => {
       if (el.value == taskTime) {
          taskTime = SECONDS_QUANTITY_ARRAY[el.value - 1]
+         return taskTime
       }
    })
-   return taskTime
 }
 
-function setSeconds(seconds) {
+function setSeconds({seconds, checkbox}) {
    let activity = props.timelineItem.activity
    let id = 0
    let timeValue = 0
@@ -112,6 +120,10 @@ function setSeconds(seconds) {
          timeValue = el.time
       }
    })
+
+	if(checkbox){
+		seconds = SECONDS_QUANTITY_ARRAY[timeValue - 1]
+	}
 
    const data = { activity: activity, id: id, time: seconds, timeValue: timeValue }
    emit('setSeconds', data)

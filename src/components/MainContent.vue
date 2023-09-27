@@ -125,15 +125,7 @@ function setSecondsToComplete(seconds) {
          checkbox = true
       }
    })
-
-	secondsValue.value.forEach((el) => {
-		console.log(el.id, '=', seconds.id)
-		console.log(el.activity, '=', seconds.activity)
-   })
-	console.log(seconds)
 	
-	
-
    if (secondsValue.value.length && checkbox) {
       const coincidence = secondsValue.value.filter((t) => t.timeValue == seconds.value)
 
