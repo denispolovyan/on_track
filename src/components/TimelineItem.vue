@@ -10,7 +10,7 @@ import { SECONDS_QUANTITY_ARRAY } from '../constants.js'
 
 import { MinusCircleIcon } from '@heroicons/vue/24/outline'
 
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 
 const emit = defineEmits({
    setSelectedActivity: {
@@ -91,7 +91,6 @@ function setProperTime() {
    for (let el in currentTime) {
       if (el == 'time') {
          currentTime = currentTime[el]
-			return currentTime
       }
    }
 
@@ -104,12 +103,17 @@ function setProperTime() {
    props.activityTimes.forEach((el) => {
       if (el.value == taskTime) {
          taskTime = SECONDS_QUANTITY_ARRAY[el.value - 1]
-         return taskTime
       }
    })
+
+   if (currentTime) {
+      return currentTime
+   } else {
+      return taskTime
+   }
 }
 
-function setSeconds({seconds, checkbox}) {
+function setSeconds({ seconds, checkbox }) {
    let activity = props.timelineItem.activity
    let id = 0
    let timeValue = 0
@@ -121,9 +125,9 @@ function setSeconds({seconds, checkbox}) {
       }
    })
 
-	if(checkbox){
-		seconds = SECONDS_QUANTITY_ARRAY[timeValue - 1]
-	}
+   if (checkbox) {
+      seconds = SECONDS_QUANTITY_ARRAY[timeValue - 1]
+   }
 
    const data = { activity: activity, id: id, time: seconds, timeValue: timeValue }
    emit('setSeconds', data)
