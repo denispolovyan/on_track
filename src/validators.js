@@ -95,3 +95,9 @@ export function isActivitiesValid(value) {
 export function isActivityTimesValid(value) {
    return value.every(({ name, value }) => isNumber(value) && isString(name))
 }
+
+// -- // ++
+
+export function isBoolean(value) {
+   return typeof value == 'boolean'
+}

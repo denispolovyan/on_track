@@ -1,5 +1,5 @@
 <script setup>
-import { StopCircleIcon, ArrowPathIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
+import { ArrowPathIcon, ChevronRightIcon, PauseCircleIcon } from '@heroicons/vue/24/outline'
 
 import BaseButton from './BaseButton.vue'
 
@@ -19,25 +19,32 @@ const props = defineProps({
       validator(value) {
          return isNumber(value)
       }
+   },
+   process: {
+      type: Number,
+      required: true,
+      validator(value) {
+         return isNumber(value)
+      }
    }
 })
 
 const emits = defineEmits({
-	setSeconds: {
-		type: Object,
-      required: false,
-	}
+   setSeconds: {
+      type: Object,
+      required: false
+   }
 })
 
 let time = ref(props.seconds)
-const isRunning = ref(false)
+let isRunning = ref()
 
 function start() {
    if (time.value) {
       isRunning.value = setInterval(() => {
          if (time.value) {
             time.value = time.value - 1
-				emits('setSeconds', {seconds: time.value, checkbox: false})
+            emits('setSeconds', { seconds: time.value, checkbox: false, process: 1 })
          } else {
             stop()
          }
@@ -48,13 +55,14 @@ function start() {
 function stop() {
    clearInterval(isRunning.value)
    isRunning.value = false
+   emits('setSeconds', { seconds: time.value, checkbox: false, process: 0, isRunning: isRunning.value})
 }
 
 function reset() {
    clearInterval(isRunning.value)
    isRunning.value = false
    time.value = props.seconds
-	emits('setSeconds', {seconds: time.value, checkbox: true})
+   emits('setSeconds', { seconds: time.value, checkbox: true, process: 0 })
 }
 
 onMounted(() => {
@@ -69,17 +77,24 @@ watch(
       time.value = props.seconds
    }
 )
+
+watch(
+   () => props.process,
+   () => {
+      !props.process ? stop() : null
+   }
+)
 </script>
 
 <template>
    <div class="flex items-center justify-between">
       <div class="flex gap-2">
          <BaseButton
-            v-if="isRunning"
+            v-if="process || isRunning"
             @click="stop()"
-            :background="'text-white bg-red-500 hover:bg-red-700 duration-500 rounded-md'"
+            :background="'text-white duration-500 rounded-md bg-red-500  hover:bg-red-700'"
          >
-            <StopCircleIcon class="w-12"
+            <PauseCircleIcon class="w-12"
          /></BaseButton>
          <BaseButton
             v-else

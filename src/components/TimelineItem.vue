@@ -10,7 +10,7 @@ import { SECONDS_QUANTITY_ARRAY } from '../constants.js'
 
 import { MinusCircleIcon } from '@heroicons/vue/24/outline'
 
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 
 const emit = defineEmits({
    setSelectedActivity: {
@@ -68,13 +68,6 @@ const props = defineProps({
    }
 })
 
-function setSelectedActivity(activity) {
-   if (isNumber(activity)) {
-      emit('setSelectedActivity', { activity: activity, hour: props.timelineItem.hour })
-      selectedActivity.value = activity
-   }
-}
-
 const hourItemClasses = [
    props.timelineItem.hour == new Date().getHours() ? 'bg-slate-300' : 'bg-slate-100'
 ]
@@ -83,28 +76,46 @@ let placeholder = 'Rest'
 
 let selectedActivity = ref()
 
+let process = ref(0)
+
+function setSelectedActivity(activity) {
+   if (isNumber(activity)) {
+      emit('setSelectedActivity', { activity: activity, hour: props.timelineItem.hour })
+      selectedActivity.value = activity
+   }
+}
+
 function setProperTime() {
    let selectedTask = props.tasks.filter((t) => t.activity == selectedActivity.value)[0]
+   let currentTime = props.secondsValue.filter((t) => t.activity == selectedActivity.value)[0]
+   const currentProcess = props.secondsValue.filter((t) => t.activity == selectedActivity.value)[0]
    let taskTime = 0
 
-   let currentTime = props.secondsValue.filter((t) => t.activity == selectedActivity.value)[0]
-   for (let el in currentTime) {
-      if (el == 'time') {
-         currentTime = currentTime[el]
+   if (selectedTask) {
+      for (let el in currentTime) {
+         if (el == 'time') {
+            currentTime = currentTime[el]
+         }
       }
-   }
 
-   for (let el in selectedTask) {
-      if (el == 'time') {
-         taskTime = selectedTask[el]
+      for (let el in currentProcess) {
+         if (el == 'process') {
+            process.value = currentProcess[el]
+         }
       }
-   }
 
-   props.activityTimes.forEach((el) => {
-      if (el.value == taskTime) {
-         taskTime = SECONDS_QUANTITY_ARRAY[el.value - 1]
+      for (let el in selectedTask) {
+         if (el == 'time') {
+            taskTime = selectedTask[el]
+         }
       }
-   })
+
+      props.activityTimes.forEach((el) => {
+         if (el.value == taskTime) {
+            taskTime = SECONDS_QUANTITY_ARRAY[el.value - 1]
+         }
+      })
+   }
 
    if (currentTime) {
       return currentTime
@@ -113,10 +124,14 @@ function setProperTime() {
    }
 }
 
-function setSeconds({ seconds, checkbox }) {
+function setSeconds({ seconds, checkbox, process, isRunning }) {
    let activity = props.timelineItem.activity
    let id = 0
    let timeValue = 0
+	let processValue = process
+	if(isRunning) {
+		processValue = 0
+	}
 
    props.tasks.forEach((el) => {
       if (el.activity == activity) {
@@ -129,14 +144,25 @@ function setSeconds({ seconds, checkbox }) {
       seconds = SECONDS_QUANTITY_ARRAY[timeValue - 1]
    }
 
-   const data = { activity: activity, id: id, time: seconds, timeValue: timeValue }
-   emit('setSeconds', data)
+   const data = {
+      activity: activity,
+      id: id,
+      time: seconds,
+      timeValue: timeValue,
+      process: processValue
+   }
+   if (id) {
+      emit('setSeconds', data)
+   }
 }
 
 watch(
    () => selectedActivity.value,
    () => {
       setProperTime()
+      if (selectedActivity.value == 0) {
+         process.value = 0
+      }
    }
 )
 </script>
@@ -160,13 +186,17 @@ watch(
                :selected="timelineItem.activity"
                @select="setSelectedActivity($event)"
             />
-            <base-button
+            <base-button v-if="!process"
                :background="'text-white bg-red-500 hover:bg-red-700 duration-500'"
                @clickButton="setSelectedActivity(0)"
                ><MinusCircleIcon class="w-12"
             /></base-button>
          </div>
-         <timeline-timer :seconds="setProperTime()" @setSeconds="setSeconds($event)" />
+         <timeline-timer
+            :seconds="setProperTime()"
+            :process="process"
+            @setSeconds="setSeconds($event)"
+         />
       </div>
    </li>
 </template>

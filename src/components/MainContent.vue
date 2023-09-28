@@ -112,6 +112,11 @@ function setSelectedActivity(activity) {
          selectedTime.activity = activity.value
       }
    }
+
+   secondsValue.value.forEach((el) => {
+      el.process = 0
+   })
+
    localStorage.setItem('seconds-list', JSON.stringify(secondsValue.value))
 }
 
@@ -125,7 +130,7 @@ function setSecondsToComplete(seconds) {
          checkbox = true
       }
    })
-	
+
    if (secondsValue.value.length && checkbox) {
       const coincidence = secondsValue.value.filter((t) => t.timeValue == seconds.value)
 
@@ -140,6 +145,7 @@ function setSecondsToComplete(seconds) {
    if (!seconds.value && secondsValue.value.length && checkbox) {
       secondsValue.value.filter((t) => t.id == seconds.id)[0].time = 0
    }
+
    localStorage.setItem('seconds-list', JSON.stringify(secondsValue.value))
 }
 
