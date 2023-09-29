@@ -2,8 +2,32 @@
 import { CheckCircleIcon } from '@heroicons/vue/24/solid'
 
 import { useRouter } from 'vue-router'
+import { isNumber, isString } from '../validators';
 
 const router = useRouter()
+
+const props = defineProps({
+	progress: {
+		type: Number,
+		required: true,
+		default(){
+			return 0;
+		},
+		validator(value){
+			return isNumber(value)
+		}
+	}, 
+	progressStyle: {
+		type: String,
+		required: true,
+		default(){
+			return 'bg-red-500'
+		},
+		validator(value){
+			return isString(value)
+		}
+	}
+})
 
 function setCurrentPage(location) {
    router.push('#' + location)
@@ -19,8 +43,8 @@ function setCurrentPage(location) {
       </div>
       <div class="flex gap-1 items-center font-semibold cursor-pointer" v-else>
          <a @click="setCurrentPage('progress')" class="">Progress</a>
-         <p>20%</p>
-         <p class="w-4 h-4 bg-red-600 rounded-full"></p>
+         <p>{{ Math.round(props.progress) }} %</p>
+         <p class="w-4 h-4 rounded-full" :class="progressStyle"></p>
       </div>
    </header>
 </template>

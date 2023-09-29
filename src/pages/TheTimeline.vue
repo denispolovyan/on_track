@@ -40,13 +40,6 @@ defineProps({
    }
 })
 
-defineEmits({
-   setSeconds: {
-      type: Object,
-      required: false
-   }
-})
-
 const activityTimes = generateActivityTimes()
 
 onMounted(() => {
@@ -62,7 +55,6 @@ onMounted(() => {
       <ul class="flex flex-col gap-10 my-4">
          <timeline-item
             v-for="timelineItem in timelineList"
-            @setSeconds="$emit('setSeconds', $event)"
             :activityTimes="activityTimes"
             :key="timelineItem.hour"
             :timelineItem="timelineItem"

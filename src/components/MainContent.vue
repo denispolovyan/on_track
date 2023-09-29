@@ -1,4 +1,6 @@
 <script setup>
+import HeaderPanel from '../components/HeaderPanel.vue'
+import NavigationListVue from '../components/NavigationList.vue'
 import TheTimeline from '../pages/TheTimeline.vue'
 import TheProgress from '../pages/TheProgress.vue'
 import TheActivities from '../pages/TheActivities.vue'
@@ -14,15 +16,17 @@ import {
 
 import { generateTimelineList } from '../functions.js'
 
-import { ref, onMounted, provide } from 'vue'
+import { ref, onMounted, provide, watch } from 'vue'
+
+const widthStyles = 'mx-auto start:w-full lg:w-2/3 xl:w-1/2 2xl:w-2/5 3xl:w-1/3'
 
 let activities = ref(ACTIVITIES_LIST)
-
 let timelineList = ref(generateTimelineList())
-
 let tasks = ref([])
-
 let secondsValue = ref([])
+
+let progress = ref(0)
+let progressStyle = ref()
 
 provide('setSecondsToComplete', setSecondsToComplete)
 provide('deleteTask', deleteTask)
@@ -30,7 +34,6 @@ provide('setSelectedActivity', setSelectedActivity)
 provide('deleteActivity', deleteActivity)
 provide('setSelectedTimelineActivity', setSelectedTimelineActivity)
 provide('setSeconds', setSeconds)
-
 
 function addTask() {
    const id = tasks.value.length + 1
@@ -128,6 +131,15 @@ function setSelectedActivity(activity) {
    localStorage.setItem('seconds-list', JSON.stringify(secondsValue.value))
 }
 
+function setSelectedTimelineActivity({ hour, activity }) {
+   timelineList.value.forEach((el) => {
+      if (el.hour == hour) {
+         el.activity = activity
+      }
+   })
+   localStorage.setItem('timeline-list', JSON.stringify(timelineList.value))
+}
+
 function setSecondsToComplete(seconds) {
    tasks.value.filter((t) => t.id == seconds.id)[0].time = seconds.value
    localStorage.setItem('tasks-list', JSON.stringify(tasks.value))
@@ -155,15 +167,6 @@ function setSecondsToComplete(seconds) {
    }
 
    localStorage.setItem('seconds-list', JSON.stringify(secondsValue.value))
-}
-
-function setSelectedTimelineActivity({ hour, activity }) {
-   timelineList.value.forEach((el) => {
-      if (el.hour == hour) {
-         el.activity = activity
-      }
-   })
-   localStorage.setItem('timeline-list', JSON.stringify(timelineList.value))
 }
 
 function setSeconds(data) {
@@ -201,10 +204,39 @@ onMounted(() => {
       secondsValue.value = JSON.parse(secondsValueList)
    }
 })
+
+watch(
+   () => tasks.value,
+   () => {
+      let doneTasks = []
+      tasks.value.forEach((task) => {
+         if (task.activity == 0) {
+            doneTasks.push(task)
+         }
+      })
+      if(tasks.value.length){
+			progress.value = (doneTasks.length / tasks.value.length) * 100
+		} else {
+			progress.value = 100
+		}
+
+		if(progress.value < 26 ){
+			progressStyle.value = 'bg-red-500'
+		} else if(progress.value < 51){
+			progressStyle.value =  'bg-orange-500'
+		} else if(progress.value < 76){
+			progressStyle.value =  'bg-yellow-500'
+		} else {
+			progressStyle.value =  'bg-green-500'
+		} 
+   },
+   { deep: true }
+)
 </script>
 
 <template>
-   <main class="px-2 flex flex-col flex-grow">
+   <header-panel :class="widthStyles" :progress="progress" :progressStyle="progressStyle"/>
+   <main class="px-2 flex flex-col flex-grow" :class="widthStyles">
       <the-timeline
          :activities="activities"
          :timelineList="timelineList"
@@ -220,6 +252,7 @@ onMounted(() => {
          :tasks="tasks"
          v-else-if="$route['fullPath'].slice(2) == PAGE_ACTIVITIES"
       />
-      <not-found v-else />
+      <not-found v-else :class="widthStyles" />
    </main>
+   <navigation-list-vue :class="widthStyles" />
 </template>
