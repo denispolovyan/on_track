@@ -26,28 +26,12 @@ defineProps({
 })
 
 defineEmits({
-   deleteActivity: {
-      type: String,
-      required: true
-   },
    addActivity: {
       type: String
    },
    addTask: {
       required: false
    },
-   deleteTask: {
-      type: Number,
-      required: true
-   },
-   setSelectedActivity: {
-      type: Object,
-      required: true
-   },
-   setSecondsToComplete: {
-      type: Object,
-      required: true
-   }
 })
 
 </script>
@@ -75,10 +59,6 @@ defineEmits({
             :activities="userActivities"
             :task="task"
 				:tasks="tasks"
-            @deleteActivity="$emit('deleteActivity', $event)"
-            @deleteTask="$emit('deleteTask', $event)"
-            @setSelectedActivity="$emit('setSelectedActivity', $event)"
-            @setSecondsToComplete="$emit('setSecondsToComplete', $event)"
          />
       </ul>
       <no-task-component v-if="!tasks.length" />

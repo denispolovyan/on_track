@@ -14,7 +14,7 @@ import {
 
 import { generateTimelineList } from '../functions.js'
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, provide } from 'vue'
 
 let activities = ref(ACTIVITIES_LIST)
 
@@ -23,6 +23,14 @@ let timelineList = ref(generateTimelineList())
 let tasks = ref([])
 
 let secondsValue = ref([])
+
+provide('setSecondsToComplete', setSecondsToComplete)
+provide('deleteTask', deleteTask)
+provide('setSelectedActivity', setSelectedActivity)
+provide('deleteActivity', deleteActivity)
+provide('setSelectedTimelineActivity', setSelectedTimelineActivity)
+provide('setSeconds', setSeconds)
+
 
 function addTask() {
    const id = tasks.value.length + 1
@@ -202,18 +210,12 @@ onMounted(() => {
          :timelineList="timelineList"
          :tasks="tasks"
          :secondsValue="secondsValue"
-         @setSelectedActivity="setSelectedTimelineActivity($event)"
-         @setSeconds="setSeconds($event)"
          v-if="$route['fullPath'].slice(2) == PAGE_TIMELINE"
       />
       <the-progress v-else-if="$route['fullPath'].slice(2) == PAGE_PROGRESS" />
       <the-activities
          @addActivity="addActivity($event)"
-         @deleteActivity="deleteActivity($event)"
          @addTask="addTask()"
-         @deleteTask="deleteTask($event)"
-         @setSelectedActivity="setSelectedActivity($event)"
-         @setSecondsToComplete="setSecondsToComplete($event)"
          :userActivities="activities"
          :tasks="tasks"
          v-else-if="$route['fullPath'].slice(2) == PAGE_ACTIVITIES"

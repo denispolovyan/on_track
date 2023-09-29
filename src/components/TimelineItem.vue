@@ -10,18 +10,12 @@ import { SECONDS_QUANTITY_ARRAY } from '../constants.js'
 
 import { MinusCircleIcon } from '@heroicons/vue/24/outline'
 
-import { ref, watch } from 'vue'
+import { ref, watch, inject } from 'vue'
 
-const emit = defineEmits({
-   setSelectedActivity: {
-      type: Number,
-      required: true
-   },
-   setSeconds: {
-      type: Object,
-      required: false
-   }
-})
+
+const setSelectedActivityInject = inject('setSelectedTimelineActivity')
+const setSecondsInject = inject('setSeconds')
+
 
 const props = defineProps({
    timelineItem: {
@@ -80,7 +74,7 @@ let process = ref(0)
 
 function setSelectedActivity(activity) {
    if (isNumber(activity)) {
-      emit('setSelectedActivity', { activity: activity, hour: props.timelineItem.hour })
+		setSelectedActivityInject({ activity: activity, hour: props.timelineItem.hour })
       selectedActivity.value = activity
    }
 }
@@ -152,7 +146,7 @@ function setSeconds({ seconds, checkbox, process, isRunning }) {
       process: processValue
    }
    if (id) {
-      emit('setSeconds', data)
+		setSecondsInject(data)
    }
 }
 

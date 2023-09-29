@@ -4,7 +4,6 @@ import TimelineItem from '../components/TimelineItem.vue'
 import { generateActivityTimes } from '../functions.js'
 import {
    isTimelineListValid,
-   isSelectedActivityValid,
    isTasksValid,
    isActivitiesValid,
 } from '../validators.js'
@@ -41,11 +40,7 @@ defineProps({
    }
 })
 
-const emit = defineEmits({
-   setSelectedActivity: {
-      type: Object,
-      required: true
-   },
+defineEmits({
    setSeconds: {
       type: Object,
       required: false
@@ -60,11 +55,6 @@ onMounted(() => {
    window.scrollTo({ top: yCoord, behavior: 'smooth' })
 })
 
-function setSelectedActivity(activity) {
-   if (isSelectedActivityValid(activity)) {
-      emit('setSelectedActivity', activity)
-   }
-}
 </script>
 
 <template>
@@ -72,7 +62,6 @@ function setSelectedActivity(activity) {
       <ul class="flex flex-col gap-10 my-4">
          <timeline-item
             v-for="timelineItem in timelineList"
-            @setSelectedActivity="setSelectedActivity($event)"
             @setSeconds="$emit('setSeconds', $event)"
             :activityTimes="activityTimes"
             :key="timelineItem.hour"

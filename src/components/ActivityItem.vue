@@ -9,7 +9,7 @@ import { isNumber, isOptionListValid, isTaskValid, isTasksValid } from '../valid
 
 import { generateActivityTimes } from '../functions.js'
 
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 
 defineProps({
    activities: {
@@ -35,52 +35,35 @@ defineProps({
    }
 })
 
-const emit = defineEmits({
-   deleteTask: {
-      type: Number,
-      required: true
-   },
-   deleteActivity: {
-      type: Number,
-      required: true
-   },
-   setSelectedActivity: {
-      type: Number,
-      required: true
-   },
-   setSecondsToComplete: {
-      type: Number,
-      required: true
-   }
-})
 
 const selectedActivity = ref(0)
+
+const setSecondsToCompleteInject = inject('setSecondsToComplete')
+const deleteTaskInject = inject('deleteTask')
+const setSelectedActivityInject = inject('setSelectedActivity')
+const deleteActivityInject = inject('deleteActivity')
+
 
 function setSelectedActivity(activity, task) {
    selectedActivity.value = activity
 
    if (isNumber(activity)) {
-      emit('setSelectedActivity', { value: activity, id: task.id })
+		setSelectedActivityInject({ value: activity, id: task.id })
+		
    }
 }
 
 function setSecondsToComplete(time, task, checkbox) {
    if (isNumber(time) && checkbox) {
-      emit('setSecondsToComplete', { value: time, id: task.id })
+		setSecondsToCompleteInject({ value: time, id: task.id })
    } else {
-      emit('setSecondsToComplete', { value: 0, id: task.id })
+		setSecondsToCompleteInject({ value: 0, id: task.id })
    }
 }
 
 function deleteTask(id) {
    if (isNumber(id)) {
-      emit('deleteTask', id)
-   }
-}
-
-function deleteActivity(activity) {
-   if (isNumber(activity)) {
-      emit('deleteActivity', activity)
+		deleteTaskInject(id)
    }
 }
 </script>
@@ -96,7 +79,7 @@ function deleteActivity(activity) {
             @select="setSelectedActivity($event, task)"
          />
          <base-button
-            @clickButton="deleteActivity(selectedActivity)"
+            @clickButton="deleteActivityInject(selectedActivity)"
             :background="'bg-rose-600 hover:bg-rose-800 text-white duration-500'"
             ><TrashIcon class="h-12"
          /></base-button>
