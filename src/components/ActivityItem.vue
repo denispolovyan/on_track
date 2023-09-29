@@ -3,7 +3,7 @@ import BaseButton from './BaseButton.vue'
 import BaseSelect from './BaseSelect.vue'
 import BaseHorizontalButton from './BaseHorizontalButton.vue'
 
-import { MinusIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { MinusIcon, TrashIcon, DocumentCheckIcon } from '@heroicons/vue/24/outline'
 
 import { isNumber, isOptionListValid, isTaskValid, isTasksValid } from '../validators.js'
 
@@ -35,7 +35,6 @@ defineProps({
    }
 })
 
-
 const selectedActivity = ref(0)
 
 const setSecondsToCompleteInject = inject('setSecondsToComplete')
@@ -43,27 +42,25 @@ const deleteTaskInject = inject('deleteTask')
 const setSelectedActivityInject = inject('setSelectedActivity')
 const deleteActivityInject = inject('deleteActivity')
 
-
 function setSelectedActivity(activity, task) {
    selectedActivity.value = activity
 
    if (isNumber(activity)) {
-		setSelectedActivityInject({ value: activity, id: task.id })
-		
+      setSelectedActivityInject({ value: activity, id: task.id })
    }
 }
 
 function setSecondsToComplete(time, task, checkbox) {
    if (isNumber(time) && checkbox) {
-		setSecondsToCompleteInject({ value: time, id: task.id })
+      setSecondsToCompleteInject({ value: time, id: task.id })
    } else {
-		setSecondsToCompleteInject({ value: 0, id: task.id })
+      setSecondsToCompleteInject({ value: 0, id: task.id })
    }
 }
 
 function deleteTask(id) {
    if (isNumber(id)) {
-		deleteTaskInject(id)
+      deleteTaskInject(id)
    }
 }
 </script>
@@ -75,16 +72,25 @@ function deleteTask(id) {
             :placeholder="'Rest'"
             :optionsList="activities"
             :selected="task.activity"
-				:tasks="tasks"
+            :tasks="tasks"
             @select="setSelectedActivity($event, task)"
          />
          <base-button
+            v-if="!task.done"
             @clickButton="deleteActivityInject(selectedActivity)"
             :background="'bg-rose-600 hover:bg-rose-800 text-white duration-500'"
             ><TrashIcon class="h-12"
          /></base-button>
+			<base-button
+            v-else
+            :background="'bg-teal-600 hover:bg-teal-800 text-white duration-500'"
+            ><DocumentCheckIcon class="h-12"
+         /></base-button>
       </div>
-      <div class="flex justify-between items-center border rounded-md bg-stone-100">
+      <div
+         class="flex justify-between items-center border rounded-md bg-stone-100"
+         v-if="!task.done"
+      >
          <base-select
             :placeholder="'h:m:s'"
             :optionsList="generateActivityTimes()"
@@ -93,6 +99,7 @@ function deleteTask(id) {
             class="border-r"
          />
          <base-button
+            v-if="!task.done"
             @clickButton="setSecondsToComplete($event, task, false)"
             :background="'bg-yellow-500 text-white hover:bg-yellow-600 duration-500'"
             ><MinusIcon class="h-12"

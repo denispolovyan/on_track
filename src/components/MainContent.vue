@@ -37,7 +37,7 @@ provide('setSeconds', setSeconds)
 
 function addTask() {
    const id = tasks.value.length + 1
-   const taskToAdd = { activity: 0, time: 0, id: id }
+   const taskToAdd = { activity: 0, time: 0, id: id, done: false }
    tasks.value.unshift(taskToAdd)
    localStorage.setItem('tasks-list', JSON.stringify(tasks.value))
 }
@@ -177,13 +177,41 @@ function setSeconds(data) {
       tasks.value.forEach((task) => {
          if (task.id == data.id) {
             task.time = 0
+				task.done = true
             localStorage.setItem('tasks-list', JSON.stringify(tasks.value))
          }
       })
+      setProgress()
+   }
+}
+
+function setProgress() {
+   let doneTasks = []
+   tasks.value.forEach((task) => {
+      if (task.done == true ) {
+         doneTasks.push(task)
+      }
+   })
+   if (tasks.value.length) {
+      progress.value = (doneTasks.length / tasks.value.length) * 100
+   } else {
+      progress.value = 100
+   }
+
+   if (progress.value < 26) {
+      progressStyle.value = 'bg-red-500'
+   } else if (progress.value < 51) {
+      progressStyle.value = 'bg-orange-500'
+   } else if (progress.value < 76) {
+      progressStyle.value = 'bg-yellow-500'
+   } else {
+      progressStyle.value = 'bg-green-500'
    }
 }
 
 onMounted(() => {
+   progress.value = 100
+
    const tasksList = localStorage.getItem('tasks-list')
    if (JSON.parse(tasksList)) {
       tasks.value = JSON.parse(tasksList)
@@ -208,34 +236,14 @@ onMounted(() => {
 watch(
    () => tasks.value,
    () => {
-      let doneTasks = []
-      tasks.value.forEach((task) => {
-         if (task.activity == 0) {
-            doneTasks.push(task)
-         }
-      })
-      if(tasks.value.length){
-			progress.value = (doneTasks.length / tasks.value.length) * 100
-		} else {
-			progress.value = 100
-		}
-
-		if(progress.value < 26 ){
-			progressStyle.value = 'bg-red-500'
-		} else if(progress.value < 51){
-			progressStyle.value =  'bg-orange-500'
-		} else if(progress.value < 76){
-			progressStyle.value =  'bg-yellow-500'
-		} else {
-			progressStyle.value =  'bg-green-500'
-		} 
+      setProgress()
    },
    { deep: true }
 )
 </script>
 
 <template>
-   <header-panel :class="widthStyles" :progress="progress" :progressStyle="progressStyle"/>
+   <header-panel :class="widthStyles" :progress="progress" :progressStyle="progressStyle" />
    <main class="px-2 flex flex-col flex-grow" :class="widthStyles">
       <the-timeline
          :activities="activities"
